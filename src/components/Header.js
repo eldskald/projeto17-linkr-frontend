@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
-import { IoChevronDownOutline, IoChevronUpOutline } from 'react-icons/io5';
+import { IoChevronDownOutline } from 'react-icons/io5';
 import UserContext from '../shared/userContext';
 
 function Header() {
@@ -14,20 +14,16 @@ function Header() {
 
     const [logoutDropdown, setLogoutDropdown] = useState(false);
 
-    function LogoutDropdown({ active }) {
+    function LogoutDropdown() {
         return (
-            <DropdownMenu style={
-                {transform: (active ? 'translateY(72px)' : 'translateY(0px)')}
-            }>
-                <div onClick={handleLogout}>
-                    Logout
-                </div>
-            </DropdownMenu>
+            <DropdownWrapper>
+                <DropdownMenu active={logoutDropdown}>
+                    <div onClick={handleLogout}>
+                        Logout
+                    </div>
+                </DropdownMenu>
+            </DropdownWrapper>
         );
-    }
-
-    function handleClick() {
-        setLogoutDropdown(!logoutDropdown)
     }
 
     function handleLogout() {
@@ -38,24 +34,17 @@ function Header() {
         <>
             <Container>
                 <Logo>linkr</Logo>
-                <UserAvatar onClick={handleClick}>
-                    {
-                        logoutDropdown ? (
-                            <IoChevronUpOutline
-                                color={'var(--textcolor1)'}
-                                size={'32px'}
-                            />
-                        ) : (
-                            <IoChevronDownOutline
-                                color={'var(--textcolor1)'}
-                                size={'32px'}
-                            />
-                        )
-                    }
-                    <img src={user.profilePicture} alt={user.name} />
+                <UserAvatar onClick={() => setLogoutDropdown(!logoutDropdown)}>
+                   <IconWrapper active={logoutDropdown}>
+                        <IoChevronDownOutline 
+                            color={'var(--textcolor1)'}
+                            size={'32px'}
+                        />
+                    </IconWrapper>
+                    <AvatarImg src={user.profilePicture} alt={user.name} />
                 </UserAvatar>
             </Container>
-            <LogoutDropdown active={logoutDropdown} />
+            <LogoutDropdown />
         </>
     );
 }
@@ -89,29 +78,50 @@ const UserAvatar = styled.div`
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
-
-    > img {
-        width: 52px;
-        height: 52px;
-        border-radius: 50%;
-    }
 `;
 
-const DropdownMenu = styled.div`
+const AvatarImg = styled.img`
+    widht: 52px;
+    height: 52px;
+    border-radius: 50%;
+`;
+
+const IconWrapper = styled.div`
+    transition: transform 0.2s;
+    
+    ${(props) => (
+        props.active && css`
+            transform: rotate(-180deg);
+        `
+    )};
+`;
+
+const DropdownWrapper = styled.div`
     position: absolute;
-    width: 160px;
-    height: 48px;
     top: 0px;
     right: 0px;
     z-index: 1;
+`;
 
+const DropdownMenu = styled.div`
+    width: 160px;
+    height: 48px;
+
+    padding: 20px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-end;
     align-items: center;
 
     background-color: var(--divcolor1);
     border-radius: 0px 0px 0px 20px;
-    transition: transform 2s ease-in-out;
+    transition: all 0.2s;
+
+    ${(props) => (
+        props.active && css`
+            height: 120px;
+        `
+    )};
 
     > div {
         cursor: pointer;
