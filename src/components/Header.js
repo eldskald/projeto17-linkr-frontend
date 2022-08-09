@@ -14,18 +14,6 @@ function Header() {
 
     const [logoutDropdown, setLogoutDropdown] = useState(false);
 
-    function LogoutDropdown() {
-        return (
-            <DropdownWrapper>
-                <DropdownMenu active={logoutDropdown}>
-                    <div onClick={handleLogout}>
-                        Logout
-                    </div>
-                </DropdownMenu>
-            </DropdownWrapper>
-        );
-    }
-
     function handleLogout() {
         return;
     }
@@ -44,7 +32,11 @@ function Header() {
                     <AvatarImg src={user.profilePicture} alt={user.name} />
                 </UserAvatar>
             </Container>
-            <LogoutDropdown />
+            <DropdownMenu active={logoutDropdown}>
+                <div onClick={handleLogout}>
+                    Logout
+                </div>
+            </DropdownMenu>
         </>
     );
 }
@@ -96,30 +88,25 @@ const IconWrapper = styled.div`
     )};
 `;
 
-const DropdownWrapper = styled.div`
+const DropdownMenu = styled.div`
     position: absolute;
     top: 0px;
     right: 0px;
     z-index: 1;
-`;
-
-const DropdownMenu = styled.div`
     width: 160px;
     height: 48px;
 
-    padding: 20px;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
 
     background-color: var(--divcolor1);
     border-radius: 0px 0px 0px 20px;
-    transition: all 0.2s;
+    transition: transform 0.2s;
 
     ${(props) => (
         props.active && css`
-            height: 120px;
+            transform: translateY(72px);
         `
     )};
 
