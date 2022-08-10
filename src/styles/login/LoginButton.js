@@ -13,6 +13,9 @@ border-radius: 6px;
 border-style: none;
 box-sizing: border-box;
 margin-bottom: 13px;
+:disabled{
+    background: var(--disabledbutton);
+}
 `;
 
 export default Button;

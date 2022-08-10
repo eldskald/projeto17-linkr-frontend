@@ -22,6 +22,7 @@ const GlobalStyle = createGlobalStyle`
         --bgcolor: #333333;
         --inputbg: #ffffff;
         --buttonbg: #1877F2;
+        --disabledbutton: #585f80;
 
     }
 

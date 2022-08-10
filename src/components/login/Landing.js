@@ -16,18 +16,44 @@ function Landing() {
     const navigation=useNavigate();
     const { token, setToken } =useContext(UserContext);
 
-    function handleLogin(event) {
-       event.preventDefault();
-       console.log("ue")
+    function handleSubmit(event){
+    event.preventDefault();
+        if(email===""){
+            alert("Please fill in your E-mail address")
+        }
+        else if(password===""){
+            alert("Please fill in your password")
+        }
+        else{
+        sendLogin();
+        }
+    }
+    function sendLogin(){
        const submitObject={
             email:email,
             password:password}
         setDisabled(true);
         const request = axios.post(process.env.REACT_APP_API_URL + "/signin", submitObject)
         request.then(response=>{
+            setDisabled(false);
+            if(response.status===200){
             localStorage.setItem('linkrToken', response.data);
             setToken(response.token);            
-            navigation('/home')
+            navigation('/timeline')
+            }
+            
+        })
+        request.catch(error=>{
+            setDisabled(false);
+            if(error.response.status===401){
+                alert("Invalid E-mail or password")
+            }
+            else if(error.response.status===500){
+                alert("Server Error");
+            }
+            else{
+                alert("Unknown Error");
+            }
         });
     };
     return (
@@ -35,10 +61,10 @@ function Landing() {
             <Container>
                 <Splash></Splash>
                 <LogDiv>
-                    <Form onSubmit={handleLogin}>
-                        <Field placeholder="e-mail" type="email" value={email} onChange={e => setEmail(e.target.value)} />
-                        <Field placeholder="password" type="password" value={password} onChange={e => setPassword(e.target.value)} />
-                        <Button type="submit" onClick={handleLogin}>Log In</Button>
+                    <Form onSubmit={handleSubmit}>
+                        <Field placeholder="e-mail" type="email" value={email} required onChange={e => setEmail(e.target.value)} disabled={isDisabled ? true : false} />
+                        <Field placeholder="password" type="password" value={password} required onChange={e => setPassword(e.target.value)} disabled={isDisabled ? true : false} />
+                        <Button type="submit" onClick={handleSubmit} disabled={isDisabled ? true : false}>Log In</Button>
                         <Link to="/cadastro/">First time? Create an account!</Link>
                     </Form>
                 </LogDiv>
