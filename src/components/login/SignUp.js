@@ -9,9 +9,11 @@ import Button from '../../styles/login/LoginButton';
 import axios from 'axios';
 
 
-function Landing() {
+function SignUp() {
     const [email, setEmail] = useState("");
     const [password, setPassword]=useState("");
+    const [profilePictureUrl, setProfilePictureUrl] = useState("");
+    const [userName, setUserName]=useState("");
     const [isDisabled, setDisabled]=useState(false);
     const navigation=useNavigate();
     const { token, setToken } =useContext(UserContext);
@@ -24,22 +26,30 @@ function Landing() {
         else if(password===""){
             alert("Please fill in your password")
         }
+        else if(userName===""){
+            alert("Please fill in your username")
+        }
+        else if(profilePictureUrl===""){
+            alert("Please fill in a URL for your profile picture")
+        }
         else{
-        sendLogin();
+        sendSignUp();
         }
     }
-    function sendLogin(){
+    function sendSignUp(){
        const submitObject={
-            email:email,
-            password:password}
+            email:email.toLowerCase(),
+            password:password,
+            name:userName,
+            pictureUrl:profilePictureUrl}
         setDisabled(true);
-        const request = axios.post(process.env.REACT_APP_API_URL + "/signin", submitObject)
+        const request = axios.post(process.env.REACT_APP_API_URL + "/signup", submitObject)
         request.then(response=>{
             setDisabled(false);
-            if(response.status===200){
+            if(response.status===201){
             localStorage.setItem('linkrToken', response.data);
             setToken(response.token);            
-            navigation('/timeline')
+            navigation('/')
             }
             
         })
@@ -64,8 +74,9 @@ function Landing() {
                     <Form onSubmit={handleSubmit}>
                         <Field placeholder="e-mail" type="email" value={email} required onChange={e => setEmail(e.target.value)} disabled={isDisabled ? true : false} />
                         <Field placeholder="password" type="password" value={password} required onChange={e => setPassword(e.target.value)} disabled={isDisabled ? true : false} />
-                        <Button type="submit" onClick={handleSubmit} disabled={isDisabled ? true : false}>Log In</Button>
-                        <Link to="/sign-up/">First time? Create an account!</Link>
+                        <Field placeholder="username" type="text" value={userName} required onChange={e => setUserName(e.target.value)} disabled={isDisabled ? true : false} />
+                        <Field placeholder="picture url" type="text" value={profilePictureUrl} required onChange={e => setProfilePictureUrl(e.target.value)} disabled={isDisabled ? true : false} />
+                        <Button type="submit" onClick={handleSubmit} disabled={isDisabled ? true : false}>Sign Up</Button>
                     </Form>
                 </LogDiv>
             </Container>
@@ -92,4 +103,4 @@ const Form = styled.div`
         color:var(--textcolor1)
     }
 `;
-export default Landing;
+export default SignUp;
