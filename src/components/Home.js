@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import UserContext from '../shared/userContext';
 import Header from './Header';
-import BaseDiv from '../styles/baseDiv';
+import Post from './posts/Post';
 
 function Home() {
 
@@ -14,15 +14,13 @@ function Home() {
         <>
             <Header />
             <Container>
-                <BaseDiv></BaseDiv>
-                <BaseDiv
-                    additional={`
-                        height: 15%;
-                        background-color: var(--divcolor4);
-                        margin-top: 32px;
-                        border: 5px solid var(--contrastcolor1);
-                    `}
-                ></BaseDiv>
+                <TitleWrapper>timeline</TitleWrapper>
+                <Post
+                    authorName={'Juvenal Juvêncio'}
+                    authorPicture={'https://nyc3.digitaloceanspaces.com/memecreator-cdn/media/__processed__/ead/template-hide-the-pain-harold-938-0c6db91aec9c.jpeg'}
+                    description={'Muito ruim, sabe nada de #react meu cachorro sabe mais #frontend que esse link'}
+                />
+                <div style={{height: '100px'}}></div>
             </Container>
         </>
     );
@@ -30,10 +28,27 @@ function Home() {
 
 const Container = styled.div`
     height: 100%;
-    padding: 100px 0px 0px 0px;
+    padding: 72px 0px 0px 0px;
     display: flex;
     flex-direction: column;
     align-items: center;
+`;
+
+const TitleWrapper = styled.div`
+    width: 612px;
+    height: 64px;
+    margin-top: 64px;
+    
+    font-family: var(--headerfont);
+    font-weight: 700;
+    font-size: 42px;
+    color: var(--textcolor1);
+
+    @media (max-width: 612px) {
+        width: 100%;
+        padding-left: 32px;
+        margin-top: 32px;
+    }
 `;
 
 export default Home;

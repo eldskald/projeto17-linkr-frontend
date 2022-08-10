@@ -9,6 +9,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 function App() {
     const [token, setToken] = useState('');
+    const [user, setUser] = useState({});
 
     useEffect(() => {
         // Nothing for now, we should load token from localStorage here.
@@ -19,7 +20,7 @@ function App() {
         <>
             <GlobalStyle />
             <UserContext.Provider value={{
-                token, setToken
+                token, setToken, user, setUser
             }}>
                 <BrowserRouter>
                     <Routes>

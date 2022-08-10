@@ -9,6 +9,11 @@ const BaseDiv = styled.div`
     padding: 16px;
     display: flex;
 
+    @media (max-width: 612px) {
+        width: 100%;
+        border-radius: 0px;
+    }
+
     ${props => props.additional && css`
         ${props.additional}
     `};
