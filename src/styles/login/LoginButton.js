@@ -12,8 +12,7 @@ font-size: 27px;
 border-radius: 6px;
 border-style: none;
 box-sizing: border-box;
-
-
+margin-bottom: 13px;
 `;
 
 export default Button;
