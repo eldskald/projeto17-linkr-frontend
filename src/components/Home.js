@@ -20,7 +20,6 @@ function Home() {
                     authorPicture={'https://nyc3.digitaloceanspaces.com/memecreator-cdn/media/__processed__/ead/template-hide-the-pain-harold-938-0c6db91aec9c.jpeg'}
                     description={'Muito ruim, sabe nada de #react meu cachorro sabe mais #frontend que esse link'}
                 />
-                <div style={{height: '100px'}}></div>
             </Container>
         </>
     );
