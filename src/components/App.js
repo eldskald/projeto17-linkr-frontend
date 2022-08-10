@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import UserContext from '../shared/userContext';
 import GlobalStyle from '../styles/globalStyle';
-import Home from './Home';
+import Home from './login/Home';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
