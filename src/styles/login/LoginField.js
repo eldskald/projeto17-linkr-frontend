@@ -15,6 +15,9 @@ font-family: var(--headerfont);
 box-sizing: border-box;
 padding: 0px 17px;
 margin-bottom: 13px;
+@media screen and (max-width:600px){
+    width:calc(100% - 20px);
+}
 `;
 
 export default Field;

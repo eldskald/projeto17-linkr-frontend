@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import UserContext from '../../shared/userContext';
-import LogDiv from '../../styles/login/LoginDiv';
+import LoginDiv from '../../styles/login/LoginDiv';
 import Splash from './Splash';
 import Field from '../../styles/login/LoginField';
 import Button from '../../styles/login/LoginButton';
@@ -46,7 +46,10 @@ function Landing() {
         request.catch(error=>{
             setDisabled(false);
             if(error.response.status===401){
-                alert("Invalid E-mail or password")
+                alert("Invalid E-mail and password combination")
+            }
+            else if(error.response.status===422){
+                alert("Please fill in a valid E-Mail")
             }
             else if(error.response.status===500){
                 alert("Server Error");
@@ -60,14 +63,14 @@ function Landing() {
         <>
             <Container>
                 <Splash></Splash>
-                <LogDiv>
+                <LoginDiv>
                     <Form onSubmit={handleSubmit}>
                         <Field placeholder="e-mail" type="email" value={email} required onChange={e => setEmail(e.target.value)} disabled={isDisabled ? true : false} />
                         <Field placeholder="password" type="password" value={password} required onChange={e => setPassword(e.target.value)} disabled={isDisabled ? true : false} />
                         <Button type="submit" onClick={handleSubmit} disabled={isDisabled ? true : false}>Log In</Button>
                         <Link to="/sign-up/">First time? Create an account!</Link>
                     </Form>
-                </LogDiv>
+                </LoginDiv>
             </Container>
         </>
     );
@@ -78,6 +81,9 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     background-color: var(--divcolor1);
+    @media screen and (max-width:600px){
+        flex-direction: column;
+    }
 `;
 const Form = styled.div`
     display:flex;

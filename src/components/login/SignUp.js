@@ -46,17 +46,18 @@ function SignUp() {
         const request = axios.post(process.env.REACT_APP_API_URL + "/signup", submitObject)
         request.then(response=>{
             setDisabled(false);
-            if(response.status===201){
-            localStorage.setItem('linkrToken', response.data);
-            setToken(response.token);            
+            if(response.status===201){       
             navigation('/')
             }
             
         })
         request.catch(error=>{
             setDisabled(false);
-            if(error.response.status===401){
-                alert("Invalid E-mail or password")
+            if(error.response.status===422){
+                alert("Please fill every field correctly!")
+            }
+            else if (error.response.status===409){
+                alert("This E-mail is already registered!")
             }
             else if(error.response.status===500){
                 alert("Server Error");
@@ -77,18 +78,21 @@ function SignUp() {
                         <Field placeholder="username" type="text" value={userName} required onChange={e => setUserName(e.target.value)} disabled={isDisabled ? true : false} />
                         <Field placeholder="picture url" type="text" value={profilePictureUrl} required onChange={e => setProfilePictureUrl(e.target.value)} disabled={isDisabled ? true : false} />
                         <Button type="submit" onClick={handleSubmit} disabled={isDisabled ? true : false}>Sign Up</Button>
+                        <Link to="/">Switch back to log in</Link>
                     </Form>
                 </LogDiv>
             </Container>
         </>
     );
 }
-
 const Container = styled.div`
     height: 100%;
     display: flex;
     align-items: center;
     background-color: var(--divcolor1);
+    @media screen and (max-width:600px){
+        flex-direction: column;
+    }
 `;
 const Form = styled.div`
     display:flex;

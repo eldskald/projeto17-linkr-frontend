@@ -16,6 +16,9 @@ margin-bottom: 13px;
 :disabled{
     background: var(--disabledbutton);
 }
+@media screen and (max-width:600px){
+    width:calc(100% - 20px);
+}
 `;
 
 export default Button;
