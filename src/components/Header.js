@@ -73,7 +73,7 @@ const UserAvatar = styled.div`
 `;
 
 const AvatarImg = styled.img`
-    widht: 52px;
+    width: 52px;
     height: 52px;
     border-radius: 50%;
 `;
