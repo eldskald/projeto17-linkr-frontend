@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import BaseDiv from '../../styles/baseDiv';
+import LinkPreview from './LinkPreview';
 
 function Post({
     authorName, authorPicture, description, link, liked, likesTotal
@@ -13,7 +14,7 @@ function Post({
     function parseDescription(text) {
         let arr = text.split(' ');
         arr = arr.map((word, index) => {
-            const regex = /^\#[a-zA-Z]+$/;
+            const regex = /^\#[a-zA-Z0-9_]+$/;
             if (regex.test(word)) {
                 const hashtag = word.replace('#', '');
                 return (
@@ -49,19 +50,20 @@ function Post({
                 <Description>
                     {parseDescription(description)}
                 </Description>
-                
+                <LinkPreview link={link} />
             </ContentContainer>
         </BaseDiv>
     );
 }
 
 const AuthorContainer = styled.div`
-    width: 72px;
+    width: 96px;
     height: 100%;
 
     padding: 16px 0px;
     display: flex;
     flex-direction: column;
+    align-items: center;
 `;
 
 const ContentContainer = styled.div`
