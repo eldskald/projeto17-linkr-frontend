@@ -137,7 +137,7 @@ const LinkWrapper = styled.div`
 
 const ErrorMessage = styled.div`
     width: 100%;
-    heigh: 100%;
+    height: 100%;
     
     display: flex;
     justify-content: center;

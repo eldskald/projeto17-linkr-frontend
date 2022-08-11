@@ -56,7 +56,7 @@ function SignUp() {
         request.catch(error=>{
             setDisabled(false);
             if(error.response.status===422){
-                setError("Please fill every field correctly!")
+                setError(error.response.data)
             }
             else if (error.response.status===409){
                 setError("This E-mail is already registered!")

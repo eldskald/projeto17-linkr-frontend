@@ -94,7 +94,7 @@ function Landing() {
                 setError("Invalid E-mail and password combination")
             }
             else if(err.response.status===422){
-                setError("Please fill in a valid E-Mail")
+                setError(error.response.data)
             }
             else if(err.response.status===500){
                 setError("Server Error");
