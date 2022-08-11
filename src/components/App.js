@@ -5,26 +5,19 @@ import GlobalStyle from '../styles/globalStyle';
 import Landing from './login/Landing';
 import Home from './Home';
 import SignUp from './login/SignUp';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const API_URL = process.env.REACT_APP_API_URL;
 
 function App() {
     const [token, setToken] = useState('');
-
-    useEffect(() => {
-        // Nothing for now, we should load token from localStorage here.
-        /*const savedToken=localStorage.getItem('linkrToken')
-        if(savedToken){
-            
-        }*/
-        return;
-    }, []);
-
+    const [user, setUser] = useState('');
+    
     return (
         <>
             <GlobalStyle />
             <UserContext.Provider value={{
-                token, setToken
+                token, setToken, user, setUser
             }}>
                 <BrowserRouter>
                     <Routes>

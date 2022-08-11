@@ -16,7 +16,18 @@ function Landing() {
     const [error, setError] = useState("");
     const [isDisabled, setDisabled]=useState(false);
     const navigation=useNavigate();
-    const { token, setToken } =useContext(UserContext);
+    const { token, setToken, setUser } =useContext(UserContext);
+
+    useEffect(() => {
+        const savedToken=localStorage.getItem('linkrToken')
+        console.log(savedToken)
+        if(savedToken){
+
+            setToken(savedToken);
+            getUserData(savedToken);
+        }
+        return;
+    }, []);
 
     function handleSubmit(event){
     event.preventDefault();
@@ -30,6 +41,33 @@ function Landing() {
         sendLogin();
         }
     }
+    
+    function getUserData(savedToken){
+        const config =({
+            headers: {
+                "Authorization": `Bearer ${savedToken}`
+            }
+        });
+        const request = axios.get(process.env.REACT_APP_API_URL + "/getuser", config)
+        request.then(response=>{
+        if(response.status===200){
+            setUser(response);            
+            navigation('/timeline');
+            }
+         })
+         request.catch(err=>{
+            console.log(err.data)
+             if(err.response.status===404){
+                localStorage.removeItem('linkrToken');
+             }
+             else if(err.response.status===401){
+                localStorage.removeItem('linkrToken');
+             }
+         });
+     };
+
+
+
     function sendLogin(){
        const submitObject={
             email:email,
