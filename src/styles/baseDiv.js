@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 
 const BaseDiv = styled.div`
+    margin: 16px 0px;
     width: 612px;
     height: 212px;
     

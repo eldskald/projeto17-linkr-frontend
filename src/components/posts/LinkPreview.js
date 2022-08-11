@@ -102,8 +102,12 @@ const InfoTitle = styled.div`
     font-family: var(--scriptfont);
     font-size: 16px;
     color: var(--textcolor2);
-    max-lines: 2;
     text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
 `;
 
 const InfoDescription = styled.div`
@@ -113,18 +117,22 @@ const InfoDescription = styled.div`
     font-family: var(--scriptfont);
     font-size: 14px;
     color: var(--textcolor3);
-    max-lines: 4;
     text-overflow: ellipsis;
+    overflow: hidden;
 `;
 
 const LinkWrapper = styled.div`
     width: 100%;
 
+    display: -webkit-box;
     font-family: var(--scriptfont);
     font-size: 16px;
     color: var(--textcolor2);
-    max-lines: 2;
     text-overflow: ellipsis;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-orient: vertical;
 `;
 
 const ErrorMessage = styled.div`

@@ -57,7 +57,6 @@ function Post({
 }
 
 const AuthorContainer = styled.div`
-    width: 96px;
     height: 100%;
 
     padding: 16px 0px;
@@ -75,6 +74,7 @@ const ContentContainer = styled.div`
 `;
 
 const AuthorIcon = styled.img`
+    margin-right: 16px;
     width: 50px;
     height: 50px;
     border-radius: 50%;
