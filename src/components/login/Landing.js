@@ -21,10 +21,10 @@ function Landing() {
     function handleSubmit(event){
     event.preventDefault();
         if(email===""){
-            alert("Please fill in your E-mail address")
+            setError("Please fill in your E-mail address")
         }
         else if(password===""){
-            alert("Please fill in your password")
+            setError("Please fill in your password")
         }
         else{
         sendLogin();

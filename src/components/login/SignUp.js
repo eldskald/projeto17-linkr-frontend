@@ -7,6 +7,7 @@ import Splash from './Splash';
 import Field from '../../styles/login/LoginField';
 import Button from '../../styles/login/LoginButton';
 import axios from 'axios';
+import Alert from '../Alert';
 
 
 function SignUp() {
@@ -22,16 +23,16 @@ function SignUp() {
     function handleSubmit(event){
     event.preventDefault();
         if(email===""){
-            alert("Please fill in your E-mail address")
+            setError("Please fill in your E-mail address")
         }
         else if(password===""){
-            alert("Please fill in your password")
+            setError("Please fill in your password")
         }
         else if(userName===""){
-            alert("Please fill in your username")
+            setError("Please fill in your username")
         }
         else if(profilePictureUrl===""){
-            alert("Please fill in a URL for your profile picture")
+            setError("Please fill in a URL for your profile picture")
         }
         else{
         sendSignUp();
@@ -82,6 +83,7 @@ function SignUp() {
                         <Link to="/">Switch back to log in</Link>
                     </Form>
                 </LogDiv>
+                <Alert error={error} setError={setError} />
             </Container>
         </>
     );
