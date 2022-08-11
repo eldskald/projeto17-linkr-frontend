@@ -15,6 +15,7 @@ function SignUp() {
     const [profilePictureUrl, setProfilePictureUrl] = useState("");
     const [userName, setUserName]=useState("");
     const [isDisabled, setDisabled]=useState(false);
+    const [error, setError] = useState("");
     const navigation=useNavigate();
     const { token, setToken } =useContext(UserContext);
 
@@ -54,16 +55,16 @@ function SignUp() {
         request.catch(error=>{
             setDisabled(false);
             if(error.response.status===422){
-                alert("Please fill every field correctly!")
+                setError("Please fill every field correctly!")
             }
             else if (error.response.status===409){
-                alert("This E-mail is already registered!")
+                setError("This E-mail is already registered!")
             }
             else if(error.response.status===500){
-                alert("Server Error");
+                setError("Server Error");
             }
             else{
-                alert("Unknown Error");
+                setError("Unknown Error");
             }
         });
     };
