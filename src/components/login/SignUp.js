@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import UserContext from '../../shared/userContext';
-import LoginDiv from '../../styles/login/LoginDiv';
+import LogDiv from '../../styles/login/LoginDiv';
 import Splash from './Splash';
 import Field from '../../styles/login/LoginField';
 import Button from '../../styles/login/LoginButton';
@@ -10,23 +10,15 @@ import axios from 'axios';
 import Alert from '../Alert';
 
 
-function Landing() {
+function SignUp() {
     const [email, setEmail] = useState("");
     const [password, setPassword]=useState("");
-    const [error, setError] = useState("");
+    const [profilePictureUrl, setProfilePictureUrl] = useState("");
+    const [userName, setUserName]=useState("");
     const [isDisabled, setDisabled]=useState(false);
+    const [error, setError] = useState("");
     const navigation=useNavigate();
-    const { token, setToken, setUser } =useContext(UserContext);
-
-    useEffect(() => {
-        const savedToken=localStorage.getItem('linkrToken')
-        if(savedToken){
-
-            setToken(savedToken);
-            getUserData(savedToken);
-        }
-        return;
-    }, []);
+    const { token, setToken } =useContext(UserContext);
 
     function handleSubmit(event){
     event.preventDefault();
@@ -36,61 +28,40 @@ function Landing() {
         else if(password===""){
             setError("Please fill in your password")
         }
+        else if(userName===""){
+            setError("Please fill in your username")
+        }
+        else if(profilePictureUrl===""){
+            setError("Please fill in a URL for your profile picture")
+        }
         else{
-        sendLogin();
+        sendSignUp();
         }
     }
-    
-    function getUserData(savedToken){
-        const config =({
-            headers: {
-                "Authorization": `Bearer ${savedToken}`
-            }
-        });
-        const request = axios.get(process.env.REACT_APP_API_URL + "/getuser", config)
-        request.then(response=>{
-        if(response.status===200){
-            setUser(response.data);            
-            navigation('/timeline');
-            }
-         })
-         request.catch(err=>{
-             if(err.response.status===404){
-                localStorage.removeItem('linkrToken');
-             }
-             else if(err.response.status===401){
-                localStorage.removeItem('linkrToken');
-             }
-         });
-     };
-
-
-
-    function sendLogin(){
+    function sendSignUp(){
        const submitObject={
-            email:email,
-            password:password}
+            email:email.toLowerCase(),
+            password:password,
+            name:userName,
+            pictureUrl:profilePictureUrl}
         setDisabled(true);
-        const request = axios.post(process.env.REACT_APP_API_URL + "/signin", submitObject)
+        const request = axios.post(process.env.REACT_APP_API_URL + "/signup", submitObject)
         request.then(response=>{
             setDisabled(false);
-            if(response.status===200){
-            localStorage.setItem('linkrToken', response.data);
-            setToken(response.data);
-            getUserData(response.data);            
-            navigation('/timeline');
+            if(response.status===201){       
+            navigation('/')
             }
             
         })
-        request.catch(err=>{
+        request.catch(error=>{
             setDisabled(false);
-            if(err.response.status===401){
-                setError("Invalid E-mail and password combination")
+            if(error.response.status===422){
+                setError("Please fill every field correctly!")
             }
-            else if(err.response.status===422){
-                setError("Please fill in a valid E-Mail")
+            else if (error.response.status===409){
+                setError("This E-mail is already registered!")
             }
-            else if(err.response.status===500){
+            else if(error.response.status===500){
                 setError("Server Error");
             }
             else{
@@ -102,20 +73,21 @@ function Landing() {
         <>
             <Container>
                 <Splash></Splash>
-                <LoginDiv>
+                <LogDiv>
                     <Form onSubmit={handleSubmit}>
                         <Field placeholder="e-mail" type="email" value={email} required onChange={e => setEmail(e.target.value)} disabled={isDisabled ? true : false} />
                         <Field placeholder="password" type="password" value={password} required onChange={e => setPassword(e.target.value)} disabled={isDisabled ? true : false} />
-                        <Button type="submit" onClick={handleSubmit} disabled={isDisabled ? true : false}>Log In</Button>
-                        <Link to="/sign-up/">First time? Create an account!</Link>
+                        <Field placeholder="username" type="text" value={userName} required onChange={e => setUserName(e.target.value)} disabled={isDisabled ? true : false} />
+                        <Field placeholder="picture url" type="text" value={profilePictureUrl} required onChange={e => setProfilePictureUrl(e.target.value)} disabled={isDisabled ? true : false} />
+                        <Button type="submit" onClick={handleSubmit} disabled={isDisabled ? true : false}>Sign Up</Button>
+                        <Link to="/">Switch back to log in</Link>
                     </Form>
-                </LoginDiv>
+                </LogDiv>
                 <Alert error={error} setError={setError} />
             </Container>
         </>
     );
 }
-
 const Container = styled.div`
     height: 100%;
     display: flex;
@@ -137,6 +109,5 @@ const Form = styled.div`
         line-height: 24px;
         color:var(--textcolor1)
     }
-    
 `;
-export default Landing;
+export default SignUp;

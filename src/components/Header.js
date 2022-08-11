@@ -6,12 +6,15 @@ import UserContext from '../shared/userContext';
 
 function Header() {
     const navigate = useNavigate();
-    const { user } = useContext(UserContext);
+    const { user,setUser,setToken } = useContext(UserContext);
 
     const [dropdown, setDropdown] = useState(false);
 
     function handleLogout() {
-        return;
+        setUser("")
+        setToken("")
+        localStorage.removeItem('linkrToken');
+        navigate("/");
     }
 
     function handleLogin() {
@@ -29,6 +32,7 @@ function Header() {
                             size={'32px'}
                         />
                     </IconWrapper>
+
                     { Object.keys(user).length > 0 ? (
                         <AvatarImg src={user.profilePicture} alt={user.name} />
                     ) : (

@@ -1,21 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import UserContext from '../shared/userContext';
 import GlobalStyle from '../styles/globalStyle';
 import Landing from './login/Landing';
+import SignUp from './login/SignUp';
 import Home from './posts/Home';
 
-const API_URL = process.env.REACT_APP_API_URL;
 
 function App() {
     const [token, setToken] = useState('');
-    const [user, setUser] = useState({});
-
-    useEffect(() => {
-        // Nothing for now, we should load token from localStorage here.
-        return;
-    }, []);
-
+    const [user, setUser] = useState('');
     return (
         <>
             <GlobalStyle />
@@ -25,7 +19,9 @@ function App() {
                 <BrowserRouter>
                     <Routes>
                         <Route path='/' element={<Landing />} />
-                        <Route path='/home' element={<Home />} />
+                        <Route path='/sign-up' element={<SignUp />} />
+
+                        <Route path='/timeline' element={<Home />} />
                     </Routes>
                 </BrowserRouter>
             </UserContext.Provider>
