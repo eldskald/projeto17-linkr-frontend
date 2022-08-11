@@ -20,7 +20,6 @@ function Landing() {
 
     useEffect(() => {
         const savedToken=localStorage.getItem('linkrToken')
-        console.log(savedToken)
         if(savedToken){
 
             setToken(savedToken);
@@ -51,12 +50,11 @@ function Landing() {
         const request = axios.get(process.env.REACT_APP_API_URL + "/getuser", config)
         request.then(response=>{
         if(response.status===200){
-            setUser(response);            
+            setUser(response.data);            
             navigation('/timeline');
             }
          })
          request.catch(err=>{
-            console.log(err.data)
              if(err.response.status===404){
                 localStorage.removeItem('linkrToken');
              }
@@ -78,7 +76,8 @@ function Landing() {
             setDisabled(false);
             if(response.status===200){
             localStorage.setItem('linkrToken', response.data);
-            setToken(response.token);            
+            setToken(response.data);
+            getUserData(response.data);            
             navigation('/timeline');
             }
             

@@ -6,16 +6,15 @@ import UserContext from '../shared/userContext';
 
 function Header() {
     const navigate = useNavigate();
-    // const { user } = useContext(UserContext);
-    const user = { 
-        name: 'Shiba',
-        profilePicture: 'https://www.petlove.com.br/images/breeds/197837/profile/original/shiba-p.jpg?1532540015'
-    };
+    const { user,setUser,setToken } = useContext(UserContext);
 
     const [logoutDropdown, setLogoutDropdown] = useState(false);
 
     function handleLogout() {
-        return;
+        setUser("")
+        setToken("")
+        localStorage.removeItem('linkrToken');
+        navigate("/");
     }
 
     return (
@@ -29,7 +28,7 @@ function Header() {
                             size={'32px'}
                         />
                     </IconWrapper>
-                    <AvatarImg src={user.profilePicture} alt={user.name} />
+                    <AvatarImg src={user.profilePictureUrl} alt={user.name} />
                 </UserAvatar>
             </Container>
             <DropdownMenu active={logoutDropdown}>
