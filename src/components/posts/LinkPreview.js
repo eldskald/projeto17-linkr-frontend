@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import PulseLoader from 'react-spinners/PulseLoader';
 
-const OPENGRAPH_APPID = '80c13249-bbcf-4714-afc1-8fd627672531'
+const OPENGRAPH_APPID = process.env.REACT_APP_OPENGRAPH_APPID;
 
 function LinkPreview({ link }) {
     const [loading, setLoading] = useState(true);
