@@ -3,9 +3,11 @@ import { useState,useEffect } from 'react';
 
 export default function Alert(props){
     const [displaying, setDisplaying]=useState(false);
+    const [errorMessage, setErrorMessage]=useState([]);
     useEffect(() => {
         if(props.error){
             setDisplaying(true);
+            setErrorMessage(props.error.split("\n"))
         }
         else{
             setDisplaying(false);
@@ -19,11 +21,14 @@ export default function Alert(props){
     return(
         <BackgroundFade displaying={displaying}>
             <Message>
-                <p>{props.error}</p>
+                {errorMessage.map(error=><Error error={error} />)}
                 <Button onClick={cleanError}>OK</Button>
             </Message>
         </BackgroundFade>
     );
+}
+function Error(props){
+    return(<p>{props.error}</p>);
 }
 
 const BackgroundFade=styled.div `
@@ -44,15 +49,16 @@ border-radius: 25px;
 background: var(--divcolor4);
 box-sizing: border-box;
 padding: 15px;
+display: flex;
+align-items: center;
+flex-direction: column;
 p{
     font-family: var(--scriptfont);
     font-size: 25px;
     margin-bottom: 5px;
 }
-display: flex;
-align-items: center;
-flex-direction: column;
 `;
+
 const Button= styled.button`
 border-style: none;
 background: var(--buttonbg);
