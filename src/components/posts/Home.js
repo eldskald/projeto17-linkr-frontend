@@ -7,6 +7,7 @@ import UserContext from '../../shared/userContext';
 import Header from '../Header';
 import Post from './Post';
 import NewPost from './NewPost';
+import HashtagFeed from '../hashtags/HashtagsFeed';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -19,50 +20,80 @@ function Home() {
     const [loading, setLoading] = useState('true');
 
     useEffect(() => {
-        if (!token) return navigate('/');
+        //if (!token) return navigate('/');
         loadPosts();
     }, []);
 
     function loadPosts() {
-        axios.get(`${API_URL}/posts?limit=10&offset=0`,
+        const posts = [
             {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            .then(res => {
-                setLoading('');
-                setPosts([...res.data]);
-            })
-            .catch(err => {
-                alert("Error at Home.js useEffect" + err.message);
-            });
+                authorName: "a",
+                authorPicture: "https://www.purina-latam.com/mx/purina/nota/gatos/que-puedo-hacer-si-mi-gato-esta-triste",
+                description: "toma toma toma",
+                liked: "",
+                likes: 3,
+                metadata:""
+            },
+            {
+                authorName: "a",
+                authorPicture: "https://www.purina-latam.com/mx/purina/nota/gatos/que-puedo-hacer-si-mi-gato-esta-triste",
+                description: "toma toma toma",
+                liked: "",
+                likes: 3,
+                metadata:""
+            },
+            {
+                authorName: "a",
+                authorPicture: "https://www.purina-latam.com/mx/purina/nota/gatos/que-puedo-hacer-si-mi-gato-esta-triste",
+                description: "toma toma toma",
+                liked: "",
+                likes: 3,
+                metadata:""
+            }
+        ]
+        setPosts(posts);
+        // axios.get(`${API_URL}/posts?limit=10&offset=0`,
+        //     {
+        //         headers: {
+        //             Authorization: `Bearer ${token}`
+        //         }
+        //     })
+        //     .then(res => {
+        //         setLoading('');
+        //         setPosts([...res.data]);
+        //     })
+        //     .catch(err => {
+        //         alert("Error at Home.js useEffect" + err.message);
+        //     });
     }
 
     return (
         <>
             <Header />
-            <Container>
-                <TitleWrapper>timeline</TitleWrapper>
-                <NewPost reloadPosts={loadPosts} />
-                <SpinnerWrapper loading={loading}>
-                    <ClipLoader
-                        color={'var(--contrastcolor1)'}
-                        size={150}
-                    />
-                </SpinnerWrapper>
-                {posts.map((post, index) => (
-                    <Post
-                        key={index}
-                        authorName={post.authorName}
-                        authorPicture={post.authorPicture}
-                        description={post.description}
-                        liked={post.liked}
-                        likes={post.likes}
-                        metadata={post.metadata}
-                    />
-                ))}
-            </Container>
+            <ContainerAll>
+                <Container>
+                    <TitleWrapper>timeline</TitleWrapper>
+                    <NewPost reloadPosts={loadPosts} />
+                    <SpinnerWrapper loading={loading}>
+                        <ClipLoader
+                            color={'var(--contrastcolor1)'}
+                            size={150}
+                        />
+                    </SpinnerWrapper>
+                    {posts.map((post, index) => (
+                        <Post
+                            key={index}
+                            authorName={post.authorName}
+                            authorPicture={post.authorPicture}
+                            description={post.description}
+                            liked={post.liked}
+                            likes={post.likes}
+                            metadata={post.metadata}
+                        />
+                    ))}
+                </Container>
+                <HashtagFeed/>
+            </ContainerAll>
         </>
     );
 }
@@ -74,7 +105,6 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow-y: scroll;
 `;
 
 const TitleWrapper = styled.div`
@@ -98,5 +128,13 @@ const SpinnerWrapper = styled.div`
     margin-top: 128px;
     display: ${props => props.loading ? 'block' : 'none'};
 `;
+
+const ContainerAll = styled.div`
+    height: 100%;
+    padding: 72px 0px 0px 0px;
+    display: flex;
+    justify-content: center;
+    overflow-y: scroll;
+`
 
 export default Home;
