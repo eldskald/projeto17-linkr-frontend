@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import BaseDiv from '../../styles/baseDiv';
+import LikeButton from './LikeButton';
 import LinkPreview from './LinkPreview';
 
 function Post({
     authorName, authorPicture, description, liked, likesTotal, metadata
 }) {
-
+    console.log(liked,likesTotal);
     function handleClickHashtag(hashtag) {
         return;
     }
@@ -44,6 +45,7 @@ function Post({
         >
             <AuthorContainer>
                 <AuthorIcon src={authorPicture} alt={authorName} />
+                <LikeButton />
             </AuthorContainer>
             <ContentContainer>
                 <AuthorName>{authorName}</AuthorName>
