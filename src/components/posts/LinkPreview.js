@@ -1,54 +1,14 @@
-import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
-import PulseLoader from 'react-spinners/PulseLoader';
 
-const OPENGRAPH_APPID = process.env.REACT_APP_OPENGRAPH_APPID;
-
-function LinkPreview({ link }) {
-    const [loading, setLoading] = useState(true);
-    const [preview, setPreview] = useState({});
-    const [error, setError] = useState(false);
-
-    useEffect(() => {
-        const encoded = encodeURIComponent(link);
-        axios.get(`https://opengraph.io/api/1.1/site/${encoded}?app_id=${OPENGRAPH_APPID}`)
-            .then(res => {
-                setLoading(false);
-                setPreview(res.data.hybridGraph);
-            })
-            .catch(err => {
-                console.log(err);
-                setLoading(false);
-                setError(true);
-            });
-    }, []);
-
+function LinkPreview({ metadata }) {
     return (
-        <Container href={link} target={'_blank'}>
-            { loading ? (
-                <SpinnerWrapper>
-                    <PulseLoader
-                        color={'var(--contrastcolor1)'}
-                        size={20}
-                    />
-                </SpinnerWrapper>
-            ) : (
-                error ? (
-                    <ErrorMessage>
-                        <p>{link}</p>
-                    </ErrorMessage>
-                ) : (
-                    <>
-                        <InfoWrapper>
-                            <InfoTitle>{preview.title}</InfoTitle>
-                            <InfoDescription>{preview.description}</InfoDescription>
-                            <LinkWrapper>{link}</LinkWrapper>
-                        </InfoWrapper>
-                        <ImgWrapper src={preview.image} alt='thumbnail' />
-                    </>
-               )
-            )}
+        <Container href={metadata.url}>
+            <InfoWrapper>
+                <InfoTitle>{metadata.title}</InfoTitle>
+                <InfoDescription>{metadata.description}</InfoDescription>
+                <LinkWrapper>{metadata.url}</LinkWrapper>
+            </InfoWrapper>
+            <ImgWrapper src={metadata.image} alt='thumbnail' />
         </Container>
     );
 }
@@ -69,15 +29,6 @@ const Container = styled.a`
     :hover {
         border: 2px solid var(--divcolor3);
     }
-`;
-
-const SpinnerWrapper = styled.div`
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
 `;
 
 const ImgWrapper = styled.img`
@@ -134,21 +85,6 @@ const LinkWrapper = styled.div`
     -webkit-line-clamp: 2;
     line-clamp: 2;
     -webkit-orient: vertical;
-`;
-
-const ErrorMessage = styled.div`
-    width: 100%;
-    height: 100%;
-    
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-    > p {
-        font-family: var(--scriptfont);
-        font-size: var(16px);
-        color: var(--textcolor2);
-    }
 `;
 
 export default LinkPreview;

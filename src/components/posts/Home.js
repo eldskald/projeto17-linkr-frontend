@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
+import ClipLoader from 'react-spinners/ClipLoader';
 import UserContext from '../../shared/userContext';
 import Header from '../Header';
 import Post from './Post';
@@ -31,8 +32,7 @@ function Home() {
             })
             .catch(err => {
                 alert("Error at Home.js useEffect" + err.message);
-                //navigate('/');
-            })
+            });
     }, []);
 
     return (
@@ -40,24 +40,23 @@ function Home() {
             <Header />
             <Container>
                 <TitleWrapper>timeline</TitleWrapper>
-                <Post
-                    authorName={'Juvenal Juvêncio'}
-                    authorPicture={'https://nyc3.digitaloceanspaces.com/memecreator-cdn/media/__processed__/ead/template-hide-the-pain-harold-938-0c6db91aec9c.jpeg'}
-                    description={'Muito ruim, sabe nada de #react meu cachorro sabe mais #frontend que esse link'}
-                    link={'https://stackoverflow.com/'}
-                />
-                <Post
-                    authorName={'Juvenal Juvêncio'}
-                    authorPicture={'https://nyc3.digitaloceanspaces.com/memecreator-cdn/media/__processed__/ead/template-hide-the-pain-harold-938-0c6db91aec9c.jpeg'}
-                    description={'Muito ruim, sabe nada de #react meu cachorro sabe mais #frontend que esse link'}
-                    link={'https://stackoverflow.com/'}
-                />
-                <Post
-                    authorName={'Juvenal Juvêncio'}
-                    authorPicture={'https://nyc3.digitaloceanspaces.com/memecreator-cdn/media/__processed__/ead/template-hide-the-pain-harold-938-0c6db91aec9c.jpeg'}
-                    description={'Muito ruim, sabe nada de #react meu cachorro sabe mais #frontend que esse link'}
-                    link={'https://stackoverflow.com/'}
-                />
+                <SpinnerWrapper loading={loading}>
+                    <ClipLoader
+                        color={'var(--contrastcolor1)'}
+                        size={150}
+                    />
+                </SpinnerWrapper>
+                {posts.map((post, index) => (
+                    <Post
+                        key={index}
+                        authorName={post.authorName}
+                        authorPicture={post.authorPicture}
+                        description={post.description}
+                        liked={post.liked}
+                        likes={post.likes}
+                        metadata={post.metadata}
+                    />
+                ))}
             </Container>
         </>
     );
@@ -88,6 +87,11 @@ const TitleWrapper = styled.div`
         padding-left: 32px;
         margin-top: 32px;
     }
+`;
+
+const SpinnerWrapper = styled.div`
+    margin-top: 128px;
+    display: ${props => props.loading ? 'block' : 'none'};
 `;
 
 export default Home;

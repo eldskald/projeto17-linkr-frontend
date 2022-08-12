@@ -4,7 +4,7 @@ import BaseDiv from '../../styles/baseDiv';
 import LinkPreview from './LinkPreview';
 
 function Post({
-    authorName, authorPicture, description, link, liked, likesTotal
+    authorName, authorPicture, description, liked, likesTotal, metadata
 }) {
 
     function handleClickHashtag(hashtag) {
@@ -50,7 +50,7 @@ function Post({
                 <Description>
                     {parseDescription(description)}
                 </Description>
-                <LinkPreview link={link} />
+                <LinkPreview metadata={metadata} />
             </ContentContainer>
         </BaseDiv>
     );
