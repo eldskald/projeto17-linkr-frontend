@@ -1,12 +1,12 @@
-import { useState, useContext } from 'react';
+import { useState, useContext,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
-import { IoChevronDownOutline, IoPersonCircleOutline } from 'react-icons/io5';
+import { IoChevronDownOutline } from 'react-icons/io5';
 import UserContext from '../shared/userContext';
 
 function Header() {
     const navigate = useNavigate();
-    const { user,setUser,setToken } = useContext(UserContext);
+    const { user, setUser, setToken } = useContext(UserContext);
 
     const [dropdown, setDropdown] = useState(false);
 
@@ -17,9 +17,12 @@ function Header() {
         navigate("/");
     }
 
-    function handleLogin() {
-        navigate('/');
-    }
+    useEffect(() => {
+        if(user===""){
+            navigate("/");
+        }
+        return;
+    }, []);
 
     return (
         <>
@@ -32,27 +35,13 @@ function Header() {
                             size={'32px'}
                         />
                     </IconWrapper>
-
-                    { Object.keys(user).length > 0 ? (
                         <AvatarImg src={user.profilePicture} alt={user.name} />
-                    ) : (
-                        <IoPersonCircleOutline
-                            color={'var(--textcolor1)'}
-                            size={'42px'}
-                        />
-                    )}
                 </UserAvatar>
             </Container>
             <DropdownMenu active={dropdown}>
-                { Object.keys(user).length > 0 ? (
                     <div onClick={handleLogout}>
                         Logout
                     </div>
-                ) : (
-                    <div onClick={handleLogin}>
-                        Login
-                    </div>
-                )}
             </DropdownMenu>
         </>
     );

@@ -27,8 +27,9 @@ function Home() {
                 setLoading(false);
                 setPosts(res.data);
             })
-            .catch(() => {
-                navigate('/');
+            .catch(err => {
+                alert("Error at Home.js useEffect" + err.message);
+                //navigate('/');
             })
     }, []);
 

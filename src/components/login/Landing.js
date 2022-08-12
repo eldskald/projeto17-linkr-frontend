@@ -15,16 +15,16 @@ function Landing() {
     const [password, setPassword]=useState("");
     const [error, setError] = useState("");
     const [isDisabled, setDisabled]=useState(false);
-    const navigation=useNavigate();
-    const { token, setToken, setUser } =useContext(UserContext);
+    const navigate=useNavigate();
+    const { setToken, setUser } =useContext(UserContext);
 
     useEffect(() => {
         const savedToken=localStorage.getItem('linkrToken')
         if(savedToken){
-
             setToken(savedToken);
             getUserData(savedToken);
         }
+        
         return;
     }, []);
 
@@ -50,16 +50,22 @@ function Landing() {
         const request = axios.get(process.env.REACT_APP_API_URL + "/getuser", config)
         request.then(response=>{
         if(response.status===200){
-            setUser(response.data);            
-            navigation('/timeline');
+            setUser(response.data);    
+            navigate('/timeline');
             }
          })
          request.catch(err=>{
              if(err.response.status===404){
+                setUser("")
+                setToken("")
                 localStorage.removeItem('linkrToken');
+                navigate("/");
              }
              else if(err.response.status===401){
+                setUser("")
+                setToken("")
                 localStorage.removeItem('linkrToken');
+                navigate("/");
              }
          });
      };
@@ -78,7 +84,7 @@ function Landing() {
             localStorage.setItem('linkrToken', response.data);
             setToken(response.data);
             getUserData(response.data);            
-            navigation('/timeline');
+            navigate('/timeline');
             }
             
         })
@@ -88,7 +94,7 @@ function Landing() {
                 setError("Invalid E-mail and password combination")
             }
             else if(err.response.status===422){
-                setError("Please fill in a valid E-Mail")
+                setError(error.response.data)
             }
             else if(err.response.status===500){
                 setError("Server Error");

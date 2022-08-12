@@ -10,6 +10,7 @@ import Home from './posts/Home';
 function App() {
     const [token, setToken] = useState('');
     const [user, setUser] = useState('');
+
     return (
         <>
             <GlobalStyle />
@@ -20,7 +21,6 @@ function App() {
                     <Routes>
                         <Route path='/' element={<Landing />} />
                         <Route path='/sign-up' element={<SignUp />} />
-
                         <Route path='/timeline' element={<Home />} />
                     </Routes>
                 </BrowserRouter>
