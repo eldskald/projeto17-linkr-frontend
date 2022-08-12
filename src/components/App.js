@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import UserContext from '../shared/userContext';
 import GlobalStyle from '../styles/globalStyle';
+import Hashtag from './hashtags/Hashtag';
 import Landing from './login/Landing';
 import SignUp from './login/SignUp';
 import Home from './posts/Home';
+import HashtagPage from './hashtags/HashtagPage';
 
 
 function App() {
@@ -22,6 +24,7 @@ function App() {
                         <Route path='/' element={<Landing />} />
                         <Route path='/sign-up' element={<SignUp />} />
                         <Route path='/timeline' element={<Home />} />
+                        <Route path='/hashtag/:hashtag' element={<HashtagPage/>} />
                     </Routes>
                 </BrowserRouter>
             </UserContext.Provider>
