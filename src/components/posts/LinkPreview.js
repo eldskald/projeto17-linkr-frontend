@@ -17,7 +17,8 @@ function LinkPreview({ link }) {
                 setLoading(false);
                 setPreview(res.data.hybridGraph);
             })
-            .catch(() => {
+            .catch(err => {
+                console.log(err);
                 setLoading(false);
                 setError(true);
             });

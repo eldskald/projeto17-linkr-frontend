@@ -17,6 +17,8 @@ function Home() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        if (!token) return navigate('/');
+
         axios.get(`${API_URL}/posts?limit=10&offset=0`,
             {
                 headers: {
