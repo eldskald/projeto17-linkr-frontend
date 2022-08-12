@@ -5,9 +5,8 @@ import LikeButton from './LikeButton';
 import LinkPreview from './LinkPreview';
 
 function Post({
-    authorName, authorPicture, description, liked, likesTotal, metadata
+    authorName, authorPicture, description, liked, likes, metadata,postId
 }) {
-    console.log(liked,likesTotal);
     function handleClickHashtag(hashtag) {
         return;
     }
@@ -45,7 +44,7 @@ function Post({
         >
             <AuthorContainer>
                 <AuthorIcon src={authorPicture} alt={authorName} />
-                <LikeButton />
+                <LikeButton likes={likes} liked={liked} postId={postId} />
             </AuthorContainer>
             <ContentContainer>
                 <AuthorName>{authorName}</AuthorName>
