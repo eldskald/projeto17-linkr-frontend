@@ -9,7 +9,7 @@ import Home from './posts/Home';
 
 function App() {
     const [token, setToken] = useState('');
-    const [user, setUser] = useState('');
+    const [user, setUser] = useState({});
 
     return (
         <>

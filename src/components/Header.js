@@ -35,7 +35,7 @@ function Header() {
                             size={'32px'}
                         />
                     </IconWrapper>
-                        <AvatarImg src={user.profilePicture} alt={user.name} />
+                        <AvatarImg src={user.profilePictureUrl} alt={user.name} />
                 </UserAvatar>
             </Container>
             <DropdownMenu active={dropdown}>

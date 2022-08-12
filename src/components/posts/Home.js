@@ -6,6 +6,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import UserContext from '../../shared/userContext';
 import Header from '../Header';
 import Post from './Post';
+import NewPost from './NewPost';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -15,11 +16,14 @@ function Home() {
     const navigate = useNavigate();
 
     const [posts, setPosts] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState('true');
 
     useEffect(() => {
         if (!token) return navigate('/');
+        loadPosts();
+    }, []);
 
+    function loadPosts() {
         axios.get(`${API_URL}/posts?limit=10&offset=0`,
             {
                 headers: {
@@ -27,19 +31,20 @@ function Home() {
                 }
             })
             .then(res => {
-                setLoading(false);
-                setPosts(res.data);
+                setLoading('');
+                setPosts([...res.data]);
             })
             .catch(err => {
                 alert("Error at Home.js useEffect" + err.message);
             });
-    }, []);
+    }
 
     return (
         <>
             <Header />
             <Container>
                 <TitleWrapper>timeline</TitleWrapper>
+                <NewPost reloadPosts={loadPosts} />
                 <SpinnerWrapper loading={loading}>
                     <ClipLoader
                         color={'var(--contrastcolor1)'}
