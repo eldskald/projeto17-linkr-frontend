@@ -37,7 +37,7 @@ function Home() {
                 setPosts([...res.data]);
             })
             .catch(err => {
-                alert("Error at Home.js useEffect" + err.message);
+                console.log("Error at Home.js useEffect" + err.message);
             });
 
         axios.get(`${API_URL}/hashtags?limit=10`,
@@ -51,56 +51,65 @@ function Home() {
                 setHashtags([...res.data]);
             })
             .catch(err => {
-                alert("Error at Home.js useEffect" + err.message);
+                console.log("Error at Home.js useEffect" + err.message);
             });
-        
     }
 
     return (
         <>
             <Header />
             <ContainerAll>
-                <Container>
+                <SubContainerAll>
                     <TitleWrapper>timeline</TitleWrapper>
-                    <NewPost reloadPosts={loadPostsAndHashtags} />
-                    <SpinnerWrapper loading={loading}>
-                        <ClipLoader
-                            color={'var(--contrastcolor1)'}
-                            size={150}
-                        />
-                    </SpinnerWrapper>
-                    {posts.map((post, index) => (
-                        <Post
-                            key={index}
-                            authorName={post.authorName}
-                            authorPicture={post.authorPicture}
-                            description={post.description}
-                            liked={post.liked}
-                            likes={post.likes}
-                            metadata={post.metadata}
-                        />
-                    ))}
-                </Container>
-                <HashtagFeedDiv>
-                    <TrendingDiv>
-                        <h3>trending</h3>
-                    </TrendingDiv>
-                    <HashtagDiv>
-                        {hashtags.map((h)=>(
-                            <Hashtag
-                                hashtag={h.name}
-                            />
-                        ))}
-                    </HashtagDiv>
-                </HashtagFeedDiv>
+                    <SubContainer>
+                        <Container>
+                            <NewPost reloadPosts={loadPostsAndHashtags} />
+                            <SpinnerWrapper loading={loading}>
+                                <ClipLoader
+                                    color={'var(--contrastcolor1)'}
+                                    size={150}
+                                />
+                            </SpinnerWrapper>
+                            {posts.map((post, index) => (
+                                <Post
+                                    key={index}
+                                    authorName={post.authorName}
+                                    authorPicture={post.authorPicture}
+                                    description={post.description}
+                                    liked={post.liked}
+                                    likes={post.likes}
+                                    metadata={post.metadata}
+                                />
+                            ))}
+                        </Container>
+                        <HashtagFeedDiv>
+                            <TrendingDiv>
+                                <h3>trending</h3>
+                            </TrendingDiv>
+                            <HashtagDiv>
+                                {hashtags.map((h)=>(
+                                    <Hashtag
+                                        hashtag={h.name}
+                                    />
+                                ))}
+                            </HashtagDiv>
+                        </HashtagFeedDiv>
+                    </SubContainer>
+                </SubContainerAll>
             </ContainerAll>
         </>
     );
 }
 
-const Container = styled.div`
+const ContainerAll = styled.div`
     height: 100%;
+    display: flex;
+    justify-content: center;
+    overflow-y: scroll;
+`;
 
+const SubContainerAll = styled.div`
+    height: 100%;
     padding: 72px 0px 0px 0px;
     display: flex;
     flex-direction: column;
@@ -108,9 +117,9 @@ const Container = styled.div`
 `;
 
 const TitleWrapper = styled.div`
-    width: 612px;
+    width: 100%;
     height: 64px;
-    margin-top: 64px;
+    margin: 42px 0px 24px 0px;
     
     font-family: var(--headerfont);
     font-weight: 700;
@@ -124,18 +133,25 @@ const TitleWrapper = styled.div`
     }
 `;
 
+const SubContainer = styled.div`
+    margin-top: 16px;
+    width: fit-content;
+    display: flex;
+`;
+
+const Container = styled.div`
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
 const SpinnerWrapper = styled.div`
-    margin-top: 128px;
+    margin-top: 64px;
     display: ${props => props.loading ? 'block' : 'none'};
 `;
 
-const ContainerAll = styled.div`
-    height: 100%;
-    padding: 72px 0px 0px 0px;
-    display: flex;
-    justify-content: center;
-    overflow-y: scroll;
-`
 const HashtagFeedDiv = styled.div`
     background-color: var(--divcolor1);
     width: 301px;
@@ -143,17 +159,15 @@ const HashtagFeedDiv = styled.div`
     min-height: 200px;
     display: flex;
     flex-direction: column;
-    margin: 220px 0px 0px 25px;
+    margin: 0px 0px 0px 25px;
     font-family: var(--headerfont);
     font-style: normal;
     font-weight: 700;
     font-size: 27px;
     line-height: 40px;
     color: var(--textcolor1);
-    position: sticky;
-    top: 10px;
-    right: 70px;
     border-radius: 16px;
+
     h3{
         font-size: 27px;
         padding: 0px 0px 0px 16px;
@@ -172,7 +186,8 @@ const TrendingDiv = styled.div`
     display: flex;
     align-items: center;
     padding: 4px 0px 5px 0px;
-`
+`;
+
 const HashtagDiv = styled.div`
     padding: 0px 0px 0px 16px;
     height: 100%;
@@ -180,6 +195,6 @@ const HashtagDiv = styled.div`
     flex-direction: column;
     overflow-y: auto;
     justify-content: center;
-`
+`;
 
 export default Home;
