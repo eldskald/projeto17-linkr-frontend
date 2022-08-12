@@ -1,17 +1,14 @@
 import { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
-import ClipLoader from 'react-spinners/ClipLoader';
 import UserContext from '../../shared/userContext';
 import Header from '../Header';
-import Post from './Post';
-import NewPost from './NewPost';
+import Post from '../posts/Post';
 import Hashtag from '../hashtags/Hashtag';
 
-const API_URL = process.env.REACT_APP_API_URL;
 
-function Home() {
+export default function HashtagPage() {
 
     const { token } = useContext(UserContext);
     const navigate = useNavigate();
@@ -19,6 +16,10 @@ function Home() {
     const [posts, setPosts] = useState([]);
     const [hashtags, setHashtags] = useState([]);
     const [loading, setLoading] = useState('true');
+
+    let {hashtag} = useParams();
+
+    console.log(hashtag)
 
     useEffect(() => {
         //if (!token) return navigate('/');
@@ -66,7 +67,7 @@ function Home() {
             }
         ]
         setPosts(posts);
-        // axios.get(`${API_URL}/posts?limit=10&offset=0`,
+        // axios.get(`${API_URL}/hashtag/${hashtag}`,
         //     {
         //         headers: {
         //             Authorization: `Bearer ${token}`
@@ -101,14 +102,7 @@ function Home() {
             <Header />
             <ContainerAll>
                 <Container>
-                    <TitleWrapper>timeline</TitleWrapper>
-                    <NewPost reloadPosts={loadPostsAndHashtags} />
-                    <SpinnerWrapper loading={loading}>
-                        <ClipLoader
-                            color={'var(--contrastcolor1)'}
-                            size={150}
-                        />
-                    </SpinnerWrapper>
+                    <TitleWrapper>{hashtag}</TitleWrapper>
                     {posts.map((post, index) => (
                         <Post
                             key={index}
@@ -183,7 +177,7 @@ const HashtagFeedDiv = styled.div`
     min-height: 200px;
     display: flex;
     flex-direction: column;
-    margin: 220px 0px 0px 25px;
+    margin: 195px 0px 0px 25px;
     font-family: var(--headerfont);
     font-style: normal;
     font-weight: 700;
@@ -221,5 +215,3 @@ const HashtagDiv = styled.div`
     overflow-y: auto;
     justify-content: center;
 `
-
-export default Home;
