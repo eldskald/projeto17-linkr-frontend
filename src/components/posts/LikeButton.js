@@ -9,7 +9,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 export default function LikeButton(props){
     const [liked,setLiked]=useState(false);
-    const [likes,setLikes]=useState(0)
+    const [likes,setLikes]=useState(0);
     const [disabled,setDisabled]=useState(false);
     const { token } = useContext(UserContext);
     function handleLike(){
@@ -18,12 +18,12 @@ export default function LikeButton(props){
             unlike();
         }
         if(!liked){
-            setLiked(true)
+            setDisabled(true);
             like();
         }
     }  
     useEffect(() => {
-        setLikes(props.likes)
+        setLikes(Number(props.likes))
         if(props.liked===1){
             setLiked(true)
         }
@@ -38,6 +38,7 @@ export default function LikeButton(props){
             .then(res => {
                 setDisabled(false);
                 setLiked(false);
+                setLikes(likes-1);
             })
             .catch(err => {
                 alert("Error at likebutton delete:" + err.message);
@@ -54,6 +55,7 @@ export default function LikeButton(props){
             .then(res => {
                 setDisabled(false);
                 setLiked(true);
+                setLikes(likes+1);
             })
             .catch(err => {
                 alert("Error at likebutton delete:" + err.message);
@@ -69,15 +71,20 @@ export default function LikeButton(props){
                 <Button onClick={handleLike} disabled={disabled ? true : false}>
                     {liked?<IoHeart />:<IoHeartOutline />}
                 </Button>
-                <p>{likes}</p>
+                <p>{likes} likes</p>
             </Container>
         </IconContext.Provider>
     )
 }
 const Container=styled.div`
 margin:20px 16px 0 0;
+display: flex;
+flex-direction: column;
+align-items: center;
 p{
-    color:white;
+    font-family:var(--scriptfont);
+    color:var(--textcolor1);
+    font-size: 11px;
 }
 `;
 const Button=styled.button`

@@ -23,6 +23,7 @@ const GlobalStyle = createGlobalStyle`
         --inputbg: #ffffff;
         --buttonbg: #1877F2;
         --disabledbutton: #585f80;
+        --border: #484848;
 
     }
 
