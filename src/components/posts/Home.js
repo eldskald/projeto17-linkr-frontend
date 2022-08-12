@@ -21,78 +21,38 @@ function Home() {
     const [loading, setLoading] = useState('true');
 
     useEffect(() => {
-        //if (!token) return navigate('/');
+        if (!token) return navigate('/');
         loadPostsAndHashtags();
     }, []);
 
-    const hashtagData = [
-        {name: "#teste"},
-        {name: "#teste2"},
-        {name: "#teste3"},
-        {name: "#teste4"},
-        {name: "#teste5"},
-        {name: "#teste6"},
-        {name: "#teste7"},
-        {name: "#teste8"},
-        {name: "#teste9"},
-        {name: "#teste10"}
-    ]
-
     function loadPostsAndHashtags() {
-        const posts = [
+        axios.get(`${API_URL}/posts?limit=10&offset=0`,
             {
-                authorName: "a",
-                authorPicture: "https://www.purina-latam.com/mx/purina/nota/gatos/que-puedo-hacer-si-mi-gato-esta-triste",
-                description: "toma toma toma",
-                liked: "",
-                likes: 3,
-                metadata:""
-            },
-            {
-                authorName: "a",
-                authorPicture: "https://www.purina-latam.com/mx/purina/nota/gatos/que-puedo-hacer-si-mi-gato-esta-triste",
-                description: "toma toma toma",
-                liked: "",
-                likes: 3,
-                metadata:""
-            },
-            {
-                authorName: "a",
-                authorPicture: "https://www.purina-latam.com/mx/purina/nota/gatos/que-puedo-hacer-si-mi-gato-esta-triste",
-                description: "toma toma toma",
-                liked: "",
-                likes: 3,
-                metadata:""
-            }
-        ]
-        setPosts(posts);
-        // axios.get(`${API_URL}/posts?limit=10&offset=0`,
-        //     {
-        //         headers: {
-        //             Authorization: `Bearer ${token}`
-        //         }
-        //     })
-        //     .then(res => {
-        //         setLoading('');
-        //         setPosts([...res.data]);
-        //     })
-        //     .catch(err => {
-        //         alert("Error at Home.js useEffect" + err.message);
-        //     });
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            .then(res => {
+                setLoading('');
+                setPosts([...res.data]);
+            })
+            .catch(err => {
+                alert("Error at Home.js useEffect" + err.message);
+            });
 
-        // axios.get(`${API_URL}/hashtags?limit=10`,
-        //     {
-        //         headers: {
-        //             Authorization: `Bearer ${token}`
-        //         }
-        //     })
-        //     .then(res => {
-        //         setLoading('');
-        //         setHashtags([...res.data]);
-        //     })
-        //     .catch(err => {
-        //         alert("Error at Home.js useEffect" + err.message);
-        //     });
+        axios.get(`${API_URL}/hashtags?limit=10`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            .then(res => {
+                setLoading('');
+                setHashtags([...res.data]);
+            })
+            .catch(err => {
+                alert("Error at Home.js useEffect" + err.message);
+            });
         
     }
 
@@ -126,7 +86,7 @@ function Home() {
                         <h3>trending</h3>
                     </TrendingDiv>
                     <HashtagDiv>
-                        {hashtagData.map((h)=>(
+                        {hashtags.map((h)=>(
                             <Hashtag
                                 hashtag={h.name}
                             />
