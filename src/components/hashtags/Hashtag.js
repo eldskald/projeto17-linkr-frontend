@@ -2,14 +2,14 @@ import styled, { css } from 'styled-components';
 import { ReactTagify } from "react-tagify";
 import { useNavigate } from 'react-router-dom';
 
-export default function Hashtag(props){
+export default function Hashtag({reloadPosts, hashtag}){
 
     const navigate = useNavigate();
 
     return(
         <ReactTagify colors={'var(--textcolor1)'} tagClicked={(tag)=> navigate(`/hashtag/${tag.slice(1)}`)}>
-            <HashtagName>
-                {props.hashtag}
+            <HashtagName onClick={()=>{reloadPosts()}}>
+                {hashtag}
             </HashtagName>
         </ReactTagify>
     )
