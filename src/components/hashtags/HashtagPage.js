@@ -23,11 +23,11 @@ export default function HashtagPage() {
     useEffect(() => {
         if (!token) return navigate('/');
         loadPostsAndHashtags();
-    }, []);
+    }, [hashtag]);
 
     function loadPostsAndHashtags() {
-        
-        axios.get(`${API_URL}/hashtag/${hashtag}`,
+    
+        axios.get(`${API_URL}/hashtags/${hashtag}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -41,7 +41,7 @@ export default function HashtagPage() {
                 alert("Error at Home.js useEffect" + err.message);
             });
 
-        axios.get(`${API_URL}/hashtags?limit=10`,
+        axios.get(`${API_URL}/hashtags`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -83,6 +83,7 @@ export default function HashtagPage() {
                         {hashtags.map((h)=>(
                             <Hashtag
                                 hashtag={h.name}
+                                reloadPosts={loadPostsAndHashtags}
                             />
                         ))}
                     </HashtagDiv>
@@ -168,10 +169,10 @@ const TrendingDiv = styled.div`
     padding: 4px 0px 5px 0px;
 `
 const HashtagDiv = styled.div`
-    padding: 0px 0px 0px 16px;
+    padding: 14px 0px 0px 16px;
     height: 100%;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    justify-content: center;
+    justify-content: flex-start;
 `

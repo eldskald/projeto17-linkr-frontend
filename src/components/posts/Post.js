@@ -3,12 +3,14 @@ import styled from 'styled-components';
 import BaseDiv from '../../styles/baseDiv';
 import LikeButton from './LikeButton';
 import LinkPreview from './LinkPreview';
+import { useNavigate } from 'react-router-dom';
 
 function Post({
     authorName, authorPicture, description, liked, likes, metadata,postId
 }) {
+    const navigate = useNavigate();
     function handleClickHashtag(hashtag) {
-        return;
+        navigate(`/hashtag/${hashtag}`);
     }
     
     function parseDescription(text) {
