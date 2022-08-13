@@ -12,6 +12,7 @@ function Feed({ posts }) {
                 likes={post.likes}
                 metadata={post.metadata}
                 postId={post.postId}
+                authorId={post.authorId}
             />
         ))
     );

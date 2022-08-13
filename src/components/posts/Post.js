@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import BaseDiv from '../../styles/baseDiv';
 import LikeButton from './LikeButton';
 import LinkPreview from './LinkPreview';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 
 function Post({
-    authorName, authorPicture, description, liked, likes, metadata,postId
+    authorName, authorPicture, description, liked, likes, metadata,postId,authorId
 }) {
     const navigate = useNavigate();
     function handleClickHashtag(hashtag) {
@@ -51,7 +51,7 @@ function Post({
                 <LikeButton likes={likes} liked={liked} postId={postId} />
             </AuthorContainer>
             <ContentContainer>
-                <AuthorName>{authorName}</AuthorName>
+                <AuthorName><Link to={`/user/${authorId}`}>{authorName}</Link></AuthorName>
                 <Description>
                     {parseDescription(description)}
                 </Description>
@@ -94,6 +94,10 @@ const AuthorName = styled.div`
     font-family: var(--scriptfont);
     font-size: 20px;
     color: var(--textcolor1);
+    a{
+        text-decoration: none;
+        color:inherit;
+    }
 `;
 
 const Description = styled.div`

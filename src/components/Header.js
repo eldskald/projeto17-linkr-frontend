@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import axios from 'axios';
 import { IoChevronDownOutline, IoSearch } from 'react-icons/io5';
@@ -58,7 +58,7 @@ function Header() {
                                     src={user.profilePictureUrl}
                                     alt={user.name}
                                 />
-                                <p>{user.name}</p>
+                                <Link to={`/user/${user.id}`}><p>{user.name}</p></Link>
                             </SearchResult>
                         ))}
                     </SearchResultsContainer>
