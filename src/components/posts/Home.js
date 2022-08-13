@@ -34,13 +34,14 @@ function Home() {
             })
             .then(res => {
                 setLoading('');
+                console.log(res.data)
                 setPosts([...res.data]);
             })
             .catch(err => {
                 console.log("Error at Home.js useEffect" + err.message);
             });
 
-        axios.get(`${API_URL}/hashtags?limit=10`,
+        axios.get(`${API_URL}/hashtags`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -189,12 +190,12 @@ const TrendingDiv = styled.div`
 `;
 
 const HashtagDiv = styled.div`
-    padding: 0px 0px 0px 16px;
+    padding: 14px 0px 0px 16px;
     height: 100%;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    justify-content: center;
+    justify-content: flex-start;
 `;
 
 export default Home;
