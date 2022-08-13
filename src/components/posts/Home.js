@@ -77,6 +77,7 @@ function Home() {
                             {posts.map((post, index) => (
                                 <Post
                                     key={index}
+                                    postId={post.postId}
                                     userId={userId}
                                     authorId={post.authorId}
                                     authorName={post.authorName}
