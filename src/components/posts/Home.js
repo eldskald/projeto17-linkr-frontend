@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import ClipLoader from 'react-spinners/ClipLoader';
 import UserContext from '../../shared/userContext';
 import Header from '../Header';
-import Post from './Post';
+import Feed from './Feed';
 import NewPost from './NewPost';
 import Hashtag from '../hashtags/Hashtag';
 
@@ -65,23 +65,13 @@ function Home() {
                     <SubContainer>
                         <Container>
                             <NewPost reloadPosts={loadPostsAndHashtags} />
+                            <Feed posts={posts} />
                             <SpinnerWrapper loading={loading}>
                                 <ClipLoader
                                     color={'var(--contrastcolor1)'}
                                     size={150}
                                 />
                             </SpinnerWrapper>
-                            {posts.map((post, index) => (
-                                <Post
-                                    key={index}
-                                    authorName={post.authorName}
-                                    authorPicture={post.authorPicture}
-                                    description={post.description}
-                                    liked={post.liked}
-                                    likes={post.likes}
-                                    metadata={post.metadata}
-                                />
-                            ))}
                         </Container>
                         <HashtagFeedDiv>
                             <TrendingDiv>

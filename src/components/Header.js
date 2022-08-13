@@ -35,13 +35,13 @@ function Header() {
                             size={'32px'}
                         />
                     </IconWrapper>
-                        <AvatarImg src={user.profilePictureUrl} alt={user.name} />
+                    <AvatarImg src={user.profilePictureUrl} alt={user.name} />
                 </UserAvatar>
             </Container>
             <DropdownMenu active={dropdown}>
-                    <div onClick={handleLogout}>
-                        Logout
-                    </div>
+                <div onClick={handleLogout}>
+                    Logout
+                </div>
             </DropdownMenu>
         </>
     );
