@@ -23,7 +23,7 @@ export default function HashtagPage() {
     useEffect(() => {
         if (!token) return navigate('/');
         loadPostsAndHashtags();
-    }, []);
+    }, [hashtag]);
 
     function loadPostsAndHashtags() {
     
@@ -36,7 +36,6 @@ export default function HashtagPage() {
             .then(res => {
                 setLoading('');
                 setPosts([...res.data]);
-                console.log("teste");
             })
             .catch(err => {
                 alert("Error at Home.js useEffect" + err.message);
