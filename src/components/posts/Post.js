@@ -1,15 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import BaseDiv from '../../styles/baseDiv';
+import LikeButton from './LikeButton';
 import LinkPreview from './LinkPreview';
 import { useNavigate } from 'react-router-dom';
 
 function Post({
-    authorName, authorPicture, description, liked, likesTotal, metadata
+    authorName, authorPicture, description, liked, likes, metadata,postId
 }) {
-
     const navigate = useNavigate();
-
     function handleClickHashtag(hashtag) {
         navigate(`/hashtag/${hashtag}`);
     }
@@ -39,6 +38,8 @@ function Post({
         return arr;
     }
 
+
+
     return (
         <BaseDiv
             additional={`
@@ -47,6 +48,7 @@ function Post({
         >
             <AuthorContainer>
                 <AuthorIcon src={authorPicture} alt={authorName} />
+                <LikeButton likes={likes} liked={liked} postId={postId} />
             </AuthorContainer>
             <ContentContainer>
                 <AuthorName>{authorName}</AuthorName>

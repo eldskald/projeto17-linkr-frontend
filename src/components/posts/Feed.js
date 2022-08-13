@@ -11,6 +11,7 @@ function Feed({ posts }) {
                 liked={post.liked}
                 likes={post.likes}
                 metadata={post.metadata}
+                postId={post.postId}
             />
         ))
     );
