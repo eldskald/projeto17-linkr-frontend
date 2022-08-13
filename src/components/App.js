@@ -6,6 +6,7 @@ import Hashtag from './hashtags/Hashtag';
 import Landing from './login/Landing';
 import SignUp from './login/SignUp';
 import Home from './posts/Home';
+import PostsByUser from './posts/PostsByUser'
 import HashtagPage from './hashtags/HashtagPage';
 
 
@@ -25,6 +26,7 @@ function App() {
                         <Route path='/sign-up' element={<SignUp />} />
                         <Route path='/timeline' element={<Home />} />
                         <Route path='/hashtag/:hashtag' element={<HashtagPage/>} />
+                        <Route path='/user/:userId' element={<PostsByUser />} />
                     </Routes>
                 </BrowserRouter>
             </UserContext.Provider>
