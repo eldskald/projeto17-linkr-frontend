@@ -34,7 +34,6 @@ function Home() {
             })
             .then(res => {
                 setLoading('');
-                console.log(res.data)
                 setPosts([...res.data]);
             })
             .catch(err => {
@@ -48,7 +47,6 @@ function Home() {
                 }
             })
             .then(res => {
-                setLoading('');
                 setHashtags([...res.data]);
             })
             .catch(err => {
@@ -78,8 +76,9 @@ function Home() {
                                 <h3>trending</h3>
                             </TrendingDiv>
                             <HashtagDiv>
-                                {hashtags.map((h)=>(
+                                {hashtags.map((h, i)=>(
                                     <Hashtag
+                                        key={i}
                                         hashtag={h.name}
                                     />
                                 ))}
@@ -133,6 +132,7 @@ const SubContainer = styled.div`
 const Container = styled.div`
     height: 100%;
 
+    padding-bottom: 42px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -158,6 +158,8 @@ const HashtagFeedDiv = styled.div`
     line-height: 40px;
     color: var(--textcolor1);
     border-radius: 16px;
+    position: sticky;
+    top: 72px;
 
     h3{
         font-size: 27px;

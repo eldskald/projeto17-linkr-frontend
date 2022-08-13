@@ -18,7 +18,7 @@ const GlobalStyle = createGlobalStyle`
         --textcolor1: #ffffff;
         --textcolor2: #b7b7b7;
         --textcolor3: #9b9b9b;
-        --textcolor4: #707070;
+        --textcolor4: #3c3c3c;
         --bgcolor: #333333;
         --inputbg: #ffffff;
         --buttonbg: #1877F2;
