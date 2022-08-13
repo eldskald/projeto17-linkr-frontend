@@ -42,21 +42,6 @@ function editPost(postId, description){
             });
         }
 
-    function EditPart(authorId, userId){
-        if(authorId === userId ){
-            return (
-                <Edition>
-                    <ion-icon   name="create-outline" 
-                                onClick={() => editPost()}>
-                        </ion-icon>
-                    <ion-icon   name="trash-outline"
-                                onClick={() => deletePost()}>
-                        </ion-icon>
-                </Edition>
-            )
-        }
-    }
-
     return (
         <PostHeaderHTML>
             <AuthorName>{props.authorName}</AuthorName>
