@@ -1,11 +1,17 @@
-import React from 'react';
 import styled from 'styled-components';
 import BaseDiv from '../../styles/baseDiv';
 import LinkPreview from './LinkPreview';
+import axios from "axios";
+import { useContext } from 'react';
+import UserContext from '../../shared/userContext';
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 function Post({
-    authorName, authorPicture, description, liked, likesTotal, metadata
+    userId, authorId, authorName, authorPicture, description, liked, likesTotal, metadata
 }) {
+    
+    const { token } = useContext(UserContext);
 
     function handleClickHashtag(hashtag) {
         return;
@@ -36,6 +42,28 @@ function Post({
         return arr;
     }
 
+    function editPost(){
+        console.log('editPost')
+        return 
+    }
+
+    function deletePost(){
+        console.log('deletePost')
+        console.log('API_URL :', API_URL)
+        axios.delete(`${API_URL}/delete/2`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            .then(res => {
+                console.log('tentou deletar com sucesso ')})
+            .catch(err => {
+                console.log("Error at Function deletePost" + err.message);
+            });
+            return
+        }
+
     return (
         <BaseDiv
             additional={`
@@ -46,7 +74,18 @@ function Post({
                 <AuthorIcon src={authorPicture} alt={authorName} />
             </AuthorContainer>
             <ContentContainer>
-                <AuthorName>{authorName}</AuthorName>
+                <PostHeader>
+                    <AuthorName>{authorName}</AuthorName>
+                    {(authorId === userId)?
+                        (<TesteEdition>
+                            <ion-icon   name="create-outline" 
+                                        onClick={() => editPost()}>
+                                </ion-icon>
+                            <ion-icon   name="trash-outline"
+                                        onClick={() => deletePost()}>
+                                </ion-icon>
+                        </TesteEdition>): (<></>)}
+                </PostHeader>
                 <Description>
                     {parseDescription(description)}
                 </Description>
@@ -103,5 +142,19 @@ const Hashtag = styled.span`
     color: var(--textcolor1);
     cursor: pointer;
 `;
+
+const TesteEdition = styled.div`
+    display: flex;
+    ion-icon{
+        color: white;
+        margin-left: 5px;
+        font-size: 20px;
+    }
+`;
+
+const PostHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+`
 
 export default Post;
