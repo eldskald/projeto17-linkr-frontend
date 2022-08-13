@@ -10,7 +10,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 export default function LikeButton(props){
     const [liked,setLiked]=useState(false);
-    const [likes,setLikes]=useState(0);
+    const [likes,setLikes]=useState(Number(props.likes));
     const [likerNames,setLikerNames]=useState([]);
     const [tooltipMessage,setTooltipMessage]=useState("");
     const [disabled,setDisabled]=useState(false);
@@ -26,7 +26,6 @@ export default function LikeButton(props){
         }
     }  
     useEffect(() => {
-        setLikes(Number(props.likes))
         getLikerNames();
         if(props.liked===1){
             setLiked(true)
@@ -35,7 +34,7 @@ export default function LikeButton(props){
     }, []);
     useEffect(()=>{
         handleTooltipMessage()
-    },[likes])
+    },[likes,likerNames])
     function unlike() {
         axios.post(`${API_URL}/unlike`,{postId:props.postId},
             {
@@ -89,6 +88,9 @@ export default function LikeButton(props){
             else if(likes===2){
                 setTooltipMessage(`${likerNames[0]} and ${likerNames[1]} liked this`)
             }
+            else if(likes==1){
+                setTooltipMessage(`${likerNames[0]} liked this`)
+            }
             else{
                 setTooltipMessage(`Be the first to like this!`)
             }
@@ -105,14 +107,32 @@ export default function LikeButton(props){
             }
         })
         .then(response => {
-            setLikerNames(response.data)
-            console.log(response.data)
+            setLikerNames(response.data.map(entry=>entry.name));
+            handleTooltipMessage();
         })
         .catch(err => {
             alert("Error at likebutton getnames:" + err.message);
-            setDisabled(false);
         });
     }
+    function returnLikerNames(){
+        axios.post(`${API_URL}/likernames`,
+        {
+            postId: props.postId
+        },
+            {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            return response.data.map(entry=>entry.name);
+
+        })
+        .catch(err => {
+            alert("Error at likebutton getnames:" + err.message);
+        });
+    }
+
     return(
 
        
