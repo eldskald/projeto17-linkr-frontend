@@ -2,7 +2,6 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
-import ClipLoader from 'react-spinners/ClipLoader';
 import UserContext from '../../shared/userContext';
 import Header from '../Header';
 import Feed from './Feed';
@@ -19,6 +18,7 @@ function Home() {
     const [posts, setPosts] = useState([]);
     const [hashtags, setHashtags] = useState([]);
     const [loading, setLoading] = useState('true');
+    const [error, setError] = useState(false);
 
     useEffect(() => {
         if (!token) return navigate('/');
@@ -36,8 +36,9 @@ function Home() {
                 setLoading('');
                 setPosts([...res.data]);
             })
-            .catch(err => {
-                console.log("Error at Home.js useEffect" + err.message);
+            .catch(() => {
+                setLoading('');
+                setError(true)
             });
 
         axios.get(`${API_URL}/hashtags`,
@@ -63,13 +64,7 @@ function Home() {
                     <SubContainer>
                         <Container>
                             <NewPost reloadPosts={loadPostsAndHashtags} />
-                            <Feed posts={posts} />
-                            <SpinnerWrapper loading={loading}>
-                                <ClipLoader
-                                    color={'var(--contrastcolor1)'}
-                                    size={150}
-                                />
-                            </SpinnerWrapper>
+                            <Feed posts={posts} loading={loading} error={error} />
                         </Container>
                         <HashtagFeedDiv>
                             <TrendingDiv>
@@ -80,6 +75,7 @@ function Home() {
                                     <Hashtag
                                         key={i}
                                         hashtag={h.name}
+                                        reloadPosts={loadPostsAndHashtags}
                                     />
                                 ))}
                             </HashtagDiv>
@@ -100,10 +96,14 @@ const ContainerAll = styled.div`
 
 const SubContainerAll = styled.div`
     height: 100%;
-    padding: 72px 0px 0px 0px;
+    padding-top: 72px;
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    @media (max-width: 900px) {
+        padding-top: 144px;
+    }
 `;
 
 const TitleWrapper = styled.div`
@@ -131,16 +131,10 @@ const SubContainer = styled.div`
 
 const Container = styled.div`
     height: 100%;
-
     padding-bottom: 42px;
     display: flex;
     flex-direction: column;
     align-items: center;
-`;
-
-const SpinnerWrapper = styled.div`
-    margin-top: 64px;
-    display: ${props => props.loading ? 'block' : 'none'};
 `;
 
 const HashtagFeedDiv = styled.div`
@@ -159,7 +153,7 @@ const HashtagFeedDiv = styled.div`
     color: var(--textcolor1);
     border-radius: 16px;
     position: sticky;
-    top: 72px;
+    top: 94px;
 
     h3{
         font-size: 27px;

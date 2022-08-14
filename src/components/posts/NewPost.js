@@ -47,6 +47,7 @@ function NewPost({ reloadPosts }) {
             <BaseDiv
                 additional={`
                     margin-top: 0px;
+                    margin-bottom: 32px;
                     background-color: var(--divcolor4);
                     height: auto;
                 `}

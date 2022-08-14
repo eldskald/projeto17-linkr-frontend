@@ -112,7 +112,7 @@ function Landing() {
                     <Form onSubmit={handleSubmit}>
                         <Field placeholder="e-mail" type="email" value={email} required onChange={e => setEmail(e.target.value)} disabled={isDisabled ? true : false} />
                         <Field placeholder="password" type="password" value={password} required onChange={e => setPassword(e.target.value)} disabled={isDisabled ? true : false} />
-                        <Button type="submit" onClick={handleSubmit} disabled={isDisabled ? true : false}>Log In</Button>
+                        <Button type="submit" disabled={isDisabled ? true : false}>Log In</Button>
                         <Link to="/sign-up/">First time? Create an account!</Link>
                     </Form>
                 </LoginDiv>
@@ -127,11 +127,11 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     background-color: var(--divcolor1);
-    @media screen and (max-width:600px){
+    @media screen and (max-width:900px){
         flex-direction: column;
     }
 `;
-const Form = styled.div`
+const Form = styled.form`
     display:flex;
     flex-direction: column;
     align-items: center;

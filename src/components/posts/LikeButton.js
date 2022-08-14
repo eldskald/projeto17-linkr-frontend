@@ -2,6 +2,7 @@ import { IoHeartOutline,IoHeart } from "react-icons/io5";
 import { IconContext } from "react-icons";
 import styled from 'styled-components';
 import { useState, useEffect,useContext } from "react";
+import ReactDOMServer from 'react-dom/server';
 import UserContext from '../../shared/userContext';
 import axios from "axios";
 import ReactTooltip from 'react-tooltip';
@@ -42,13 +43,12 @@ export default function LikeButton(props){
                     Authorization: `Bearer ${token}`
                 }
             })
-            .then(res => {
+            .then(() => {
                 setDisabled(false);
                 setLiked(false);
                 setLikes(likes-1);
             })
-            .catch(err => {
-                alert("Error at likebutton delete:" + err.message);
+            .catch(() => {
                 setDisabled(false);
             });
     }
@@ -59,13 +59,12 @@ export default function LikeButton(props){
                     Authorization: `Bearer ${token}`
                 }
             })
-            .then(res => {
+            .then(() => {
                 setDisabled(false);
                 setLiked(true);
                 setLikes(likes+1);
             })
-            .catch(err => {
-                alert("Error at likebutton delete:" + err.message);
+            .catch(() => {
                 setDisabled(false);
             });
     }
@@ -110,65 +109,66 @@ export default function LikeButton(props){
             setLikerNames(response.data.map(entry=>entry.name));
             handleTooltipMessage();
         })
-        .catch(err => {
-            alert("Error at likebutton getnames:" + err.message);
-        });
     }
-    function returnLikerNames(){
-        axios.post(`${API_URL}/likernames`,
-        {
-            postId: props.postId
-        },
-            {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        .then(response => {
-            return response.data.map(entry=>entry.name);
-
-        })
-        .catch(err => {
-            alert("Error at likebutton getnames:" + err.message);
-        });
-    }
-
     return(
-
-       
-        <IconContext.Provider value={{ color: liked?"red":"white", size:35 }}>
+        <IconContext.Provider
+            value={{
+                color: liked ? "var(--contrastcolor2)" : "var(--divcolor4)",
+                size: 35
+            }}
+        >
             <Container>
-                <Button data-tip={`<p style='font-family:var(--scriptfont); color:var(--textcolor4);'>${tooltipMessage}</p>`} data-html={true} onClick={handleLike} disabled={disabled ? true : false}>
+                <Button
+                    data-tip={ReactDOMServer.renderToString(
+                        <TooltipDiv>{tooltipMessage}</TooltipDiv>
+                    )}
+                    data-html={true}
+                    onClick={handleLike}
+                    disabled={disabled ? true : false}
+                >
                     {liked?<IoHeart />:<IoHeartOutline />}
-                    <p >{likes} likes</p>
                 </Button>
-                
-            <ReactTooltip place="bottom" type="light" />
+                <p >{likes} likes</p>
+                <ReactTooltip
+                    place='bottom'
+                    backgroundColor='transparent'
+                />
             </Container>
         </IconContext.Provider>
     )
 }
 const Container=styled.div`
-margin:20px 16px 0 0;
-
-p{
-    font-family:var(--scriptfont);
-    color:var(--textcolor1);
-    font-size: 11px;
-}
+    margin:20px 16px 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    p {
+        margin-top: 12px;
+        font-family:var(--scriptfont);
+        color:var(--textcolor1);
+        font-size: 11px;
+    }
 `;
 const Button=styled.button`
-background:none;
-border-style: none;
-display: flex;
-flex-direction: column;
-align-items: center;
-:disabled{
-    opacity: 0.5;
-}
+    background:none;
+    border-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    :hover {
+        transform: scale(1.3);
+    }
+    :disabled {
+        opacity: 0.5;
+    }
 `;
-const TooltipText=styled.p`
-    font-family:var(--scriptfont);
-    color:orange;
-    font-size: 11px;
+const TooltipDiv=styled.div`
+    padding: 8px;
+    border-radius: 8px;
+    background-color: var(--divcolor4);
+    font-family: var(--scriptfont);
+    font-size: 14px;
+    color: var(--textcolor4);
 `;

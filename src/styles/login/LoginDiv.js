@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 const LoginDiv = styled.div`
     width:535px;
@@ -7,7 +7,7 @@ const LoginDiv = styled.div`
     display: flex;
     align-items: center;
     justify-content:center;
-    @media screen and (max-width:600px){
+    @media screen and (max-width:900px){
         width: 100%;
         height:calc(100% - 175px);
         padding: 40px 10px;

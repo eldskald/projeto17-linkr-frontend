@@ -2,11 +2,9 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate,useParams } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
-import ClipLoader from 'react-spinners/ClipLoader';
 import UserContext from '../../shared/userContext';
 import Header from '../Header';
 import Feed from './Feed';
-import NewPost from './NewPost';
 import Hashtag from '../hashtags/Hashtag';
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -20,6 +18,7 @@ function Home() {
     const [posts, setPosts] = useState([]);
     const [hashtags, setHashtags] = useState([]);
     const [loading, setLoading] = useState('true');
+    const [error, setError] = useState(false)
 
     useEffect(() => {
         if (!token) return navigate('/');
@@ -38,8 +37,9 @@ function Home() {
                 setLoading('');
                 setPosts([...res.data]);
             })
-            .catch(err => {
-                console.log("Error at Home.js useEffect" + err.message);
+            .catch(() => {
+                setLoading('');
+                setError(true);
             });
 
         axios.get(`${API_URL}/hashtags`,
@@ -61,7 +61,7 @@ function Home() {
                 "Authorization": `Bearer ${token}`
             }
         });
-        const request = axios.get(process.env.REACT_APP_API_URL + "/getuser/"+userId, config)
+        const request = axios.get(API_URL + "/getuser/"+userId, config)
         request.then(response=>{
         if(response.status===200){
             setViewdUser(response.data); 
@@ -88,13 +88,7 @@ function Home() {
                     </TitleWrapper>
                     <SubContainer>
                         <Container>
-                            <Feed posts={posts} />
-                            <SpinnerWrapper loading={loading}>
-                                <ClipLoader
-                                    color={'var(--contrastcolor1)'}
-                                    size={150}
-                                />
-                            </SpinnerWrapper>
+                            <Feed posts={posts} loading={loading} error={error} />
                         </Container>
                         <HashtagFeedDiv>
                             <TrendingDiv>
@@ -125,10 +119,14 @@ const ContainerAll = styled.div`
 
 const SubContainerAll = styled.div`
     height: 100%;
-    padding: 72px 0px 0px 0px;
+    padding-top: 72px;
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    @media (max-width: 900px) {
+        padding-top: 144px;
+    }
 `;
 
 const AvatarImg = styled.img`
@@ -168,17 +166,16 @@ const SubContainer = styled.div`
 `;
 
 const Container = styled.div`
+    width: 612px;
     height: 100%;
-
     padding-bottom: 42px;
     display: flex;
     flex-direction: column;
     align-items: center;
-`;
-
-const SpinnerWrapper = styled.div`
-    margin-top: 64px;
-    display: ${props => props.loading ? 'block' : 'none'};
+    
+    @media (max-width: 612px) {
+        width: 100%;
+    }
 `;
 
 const HashtagFeedDiv = styled.div`

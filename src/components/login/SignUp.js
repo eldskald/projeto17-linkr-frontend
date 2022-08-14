@@ -47,9 +47,9 @@ function SignUp() {
         setDisabled(true);
         const request = axios.post(process.env.REACT_APP_API_URL + "/signup", submitObject)
         request.then(response=>{
-            setDisabled(false);
             if(response.status===201){       
-            navigation('/')
+                setError('Success! Redirecting to login...')
+                setTimeout(() => navigation('/'), 3000)
             }
             
         })
@@ -79,7 +79,7 @@ function SignUp() {
                         <Field placeholder="password" type="password" value={password} required onChange={e => setPassword(e.target.value)} disabled={isDisabled ? true : false} />
                         <Field placeholder="username" type="text" value={userName} required onChange={e => setUserName(e.target.value)} disabled={isDisabled ? true : false} />
                         <Field placeholder="picture url" type="text" value={profilePictureUrl} required onChange={e => setProfilePictureUrl(e.target.value)} disabled={isDisabled ? true : false} />
-                        <Button type="submit" onClick={handleSubmit} disabled={isDisabled ? true : false}>Sign Up</Button>
+                        <Button type="submit" disabled={isDisabled ? true : false}>Sign Up</Button>
                         <Link to="/">Switch back to log in</Link>
                     </Form>
                 </LogDiv>
@@ -93,11 +93,11 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     background-color: var(--divcolor1);
-    @media screen and (max-width:600px){
+    @media screen and (max-width:900px){
         flex-direction: column;
     }
 `;
-const Form = styled.div`
+const Form = styled.form`
     display:flex;
     flex-direction: column;
     align-items: center;

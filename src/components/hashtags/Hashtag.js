@@ -16,12 +16,13 @@ export default function Hashtag({reloadPosts, hashtag}){
 }
 
 const HashtagName = styled.h4`
+    width: fit-content;
     font-size: 19px;
     font-weight: normal;
     margin: -10px 0px 0px 0px;
     :hover{
-        color: var(--border);
-        transition: 1s;
+        color: var(--contrastcolor1);
+        transition: 0.2s;
         cursor: pointer;
     }
 `

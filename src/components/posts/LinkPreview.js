@@ -27,7 +27,7 @@ const Container = styled.a`
     transition: all 0.2s;
 
     :hover {
-        border: 2px solid var(--divcolor3);
+        border: 2px solid var(--contrastcolor1);
     }
 `;
 

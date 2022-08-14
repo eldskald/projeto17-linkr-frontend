@@ -9,6 +9,7 @@ function Post({
     authorName, authorPicture, description, liked, likes, metadata,postId,authorId
 }) {
     const navigate = useNavigate();
+
     function handleClickHashtag(hashtag) {
         navigate(`/hashtag/${hashtag}`);
     }
@@ -38,16 +39,17 @@ function Post({
         return arr;
     }
 
-
-
     return (
         <BaseDiv
             additional={`
                 height: auto;
+                margin: 0px 0px 32px 0px;
             `}
         >
             <AuthorContainer>
-                <AuthorIcon src={authorPicture} alt={authorName} />
+                <Link to={`/user/${authorId}`}>
+                    <AuthorIcon src={authorPicture} alt={authorName} />
+                </Link>
                 <LikeButton likes={likes} liked={liked} postId={postId} />
             </AuthorContainer>
             <ContentContainer>
@@ -94,9 +96,15 @@ const AuthorName = styled.div`
     font-family: var(--scriptfont);
     font-size: 20px;
     color: var(--textcolor1);
-    a{
+    transition: color 0.2s;
+
+    > a {
         text-decoration: none;
         color:inherit;
+    }
+
+    :hover {
+        color: var(--contrastcolor1);
     }
 `;
 
@@ -111,6 +119,11 @@ const Hashtag = styled.span`
     font-weight: 700;
     color: var(--textcolor1);
     cursor: pointer;
+    transition: color 0.2s;
+
+    :hover {
+        color: var(--contrastcolor1);
+    }
 `;
 
 export default Post;

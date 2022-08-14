@@ -23,7 +23,7 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    @media screen and (max-width:600px){
+    @media screen and (max-width:900px){
         width:100%;
         height: 175px;
     }
@@ -37,7 +37,7 @@ font-style: normal;
 font-weight: 700;
 font-size: 106px;
 color:var(--textcolor1);
-@media screen and (max-width:600px){
+@media screen and (max-width:900px){
     font-size:76px;        
 }
 `;
@@ -48,7 +48,7 @@ font-weight: 700;
 font-size: 43px;
 line-height: 64px;
 color:var(--textcolor1);
-@media screen and (max-width:600px){
+@media screen and (max-width:900px){
     font-size: 23px;
     line-height: 34px;
 }

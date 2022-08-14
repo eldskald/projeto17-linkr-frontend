@@ -4,7 +4,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import UserContext from '../../shared/userContext';
 import Header from '../Header';
-import Post from '../posts/Post';
+import Feed from '../posts/Feed';
 import Hashtag from '../hashtags/Hashtag';
 
 
@@ -18,6 +18,7 @@ export default function HashtagPage() {
     const [posts, setPosts] = useState([]);
     const [hashtags, setHashtags] = useState([]);
     const [loading, setLoading] = useState('true');
+    const [error, setError] = useState(false);
     let {hashtag} = useParams();
 
     useEffect(() => {
@@ -37,8 +38,9 @@ export default function HashtagPage() {
                 setLoading('');
                 setPosts([...res.data]);
             })
-            .catch(err => {
-                alert("Error at Home.js useEffect" + err.message);
+            .catch(() => {
+                setLoading('');
+                setError(true);
             });
 
         axios.get(`${API_URL}/hashtags`,
@@ -48,11 +50,10 @@ export default function HashtagPage() {
                 }
             })
             .then(res => {
-                setLoading('');
                 setHashtags([...res.data]);
             })
             .catch(err => {
-                alert("Error at Home.js useEffect" + err.message);
+                console.log("Error at Home.js useEffect" + err.message);
             });
         
     }
@@ -61,51 +62,56 @@ export default function HashtagPage() {
         <>
             <Header />
             <ContainerAll>
-                <Container>
+                <SubContainerAll>
                     <TitleWrapper>{hashtag}</TitleWrapper>
-                    {posts.map((post, index) => (
-                        <Post
-                            key={index}
-                            authorName={post.authorName}
-                            authorPicture={post.authorPicture}
-                            description={post.description}
-                            liked={post.liked}
-                            likes={post.likes}
-                            metadata={post.metadata}
-                        />
-                    ))}
-                </Container>
-                <HashtagFeedDiv>
-                    <TrendingDiv>
-                        <h3>trending</h3>
-                    </TrendingDiv>
-                    <HashtagDiv>
-                        {hashtags.map((h)=>(
-                            <Hashtag
-                                hashtag={h.name}
-                                reloadPosts={loadPostsAndHashtags}
-                            />
-                        ))}
-                    </HashtagDiv>
-                </HashtagFeedDiv>
+                    <SubContainer>
+                        <Container>
+                            <Feed posts={posts} loading={loading} error={error} />
+                        </Container>
+                        <HashtagFeedDiv>
+                            <TrendingDiv>
+                                <h3>trending</h3>
+                            </TrendingDiv>
+                            <HashtagDiv>
+                                {hashtags.map((h, i)=>(
+                                    <Hashtag
+                                        key={i}
+                                        hashtag={h.name}
+                                        reloadPosts={loadPostsAndHashtags}
+                                    />
+                                ))}
+                            </HashtagDiv>
+                        </HashtagFeedDiv>
+                    </SubContainer>
+                </SubContainerAll>
             </ContainerAll>
         </>
     );
 }
 
-const Container = styled.div`
+const ContainerAll = styled.div`
     height: 100%;
+    display: flex;
+    justify-content: center;
+    overflow-y: scroll;
+`;
 
-    padding: 72px 0px 0px 0px;
+const SubContainerAll = styled.div`
+    height: 100%;
+    padding-top: 72px;
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    @media (max-width: 900px) {
+        padding-top: 144px;
+    }
 `;
 
 const TitleWrapper = styled.div`
-    width: 612px;
+    width: 100%;
     height: 64px;
-    margin-top: 64px;
+    margin: 42px 0px 24px 0px;
     
     font-family: var(--headerfont);
     font-weight: 700;
@@ -119,18 +125,25 @@ const TitleWrapper = styled.div`
     }
 `;
 
-const SpinnerWrapper = styled.div`
-    margin-top: 128px;
-    display: ${props => props.loading ? 'block' : 'none'};
+const SubContainer = styled.div`
+    margin-top: 16px;
+    width: fit-content;
+    display: flex;
 `;
 
-const ContainerAll = styled.div`
+const Container = styled.div`
+    width: 612px;
     height: 100%;
-    padding: 72px 0px 0px 0px;
+    padding-bottom: 42px;
     display: flex;
-    justify-content: center;
-    overflow-y: scroll;
-`
+    flex-direction: column;
+    align-items: center;
+    
+    @media (max-width: 612px) {
+        width: 100%;
+    }
+`;
+
 const HashtagFeedDiv = styled.div`
     background-color: var(--divcolor1);
     width: 301px;

@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 const Button = styled.button`
 width:430px;
@@ -13,10 +13,11 @@ border-radius: 6px;
 border-style: none;
 box-sizing: border-box;
 margin-bottom: 13px;
+cursor: pointer;
 :disabled{
     background: var(--disabledbutton);
 }
-@media screen and (max-width:600px){
+@media screen and (max-width:900px){
     width:calc(100% - 20px);
 }
 `;

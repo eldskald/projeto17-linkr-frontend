@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 const Field = styled.input`
 width:430px;
@@ -15,7 +15,7 @@ font-family: var(--headerfont);
 box-sizing: border-box;
 padding: 0px 17px;
 margin-bottom: 13px;
-@media screen and (max-width:600px){
+@media screen and (max-width:900px){
     width:calc(100% - 20px);
 }
 `;
