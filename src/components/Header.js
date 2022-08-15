@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useCallback } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import axios from 'axios';
@@ -46,16 +46,17 @@ function Header() {
         setSearch(string);
     }
 
-    const handleBlur = useCallback((e) => {
+    function handleBlur(e) {
         const currentTarget = e.currentTarget;
-        requestAnimationFrame(() => {
+
+        setTimeout(() => {
             if (!currentTarget.contains(document.activeElement)) {
                 setSearching(false);
                 setSearchResults([]);
                 setSearch('');
             }
-        });
-    }, []);
+        }, 0);
+    }
 
     return (
         <>
@@ -97,13 +98,13 @@ function Header() {
                     <SearchResultsContainer>
                         {searchResults.map((user, index) => (
                             <SearchResult key={index}>
-                                <Link to={`/user/${user.id}`}>
+                                <div onClick={() => navigate(`/user/${user.id}`)}>
                                     <img
                                         src={user.profilePictureUrl}
                                         alt={user.name}
                                     />
                                     <p>{user.name}</p>
-                                </Link>
+                                </div>
                             </SearchResult>
                         ))}
                     </SearchResultsContainer>
@@ -112,20 +113,6 @@ function Header() {
         </>
     );
 }
-
-                //    <SearchResultsContainer active={searching}>
-                //        {searchResults.map((user, index) => (
-                //            <SearchResult key={index}>
-                //                <Link to={`/user/${user.id}`}>
-                //                    <img
-                //                        src={user.profilePictureUrl}
-                //                        alt={user.name}
-                //                    />
-                //                    <p>{user.name}</p>
-                //                </Link>
-                //            </SearchResult>
-                //        ))}
-                //    </SearchResultsContainer>
 
 const Container = styled.div`
     position: absolute;
@@ -300,17 +287,19 @@ const SearchResultsContainer = styled.div`
     flex-direction: column;
 `;
 
-const SearchResult = styled.div`
+const SearchResult = styled.button`
     width: fit-content;
+    border: none;
     margin: 8px 0px;
+    background-color: transparent;
     color: var(--textcolor4);
     
-    > a {
+    > div {
         display: flex;
         align-items: center;
-        cursor: pointer;
         color: inherit;
         text-decoration: none;
+        cursor: pointer;
 
         > img {
             width: 36px;

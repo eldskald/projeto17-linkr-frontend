@@ -24,7 +24,7 @@ function Home() {
         if (!token) return navigate('/');
         loadUser();
         loadPostsAndHashtags();
-    }, []);
+    }, [userId]);
 
     function loadPostsAndHashtags() {
         setLoading('true');

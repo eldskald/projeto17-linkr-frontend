@@ -105,14 +105,19 @@ function Post({
                     margin: 0px 0px 32px 0px;
                 `}>
                 <AuthorContainer>
-                    <Link to={`/user/${authorId}`}>
-                        <AuthorIcon src={authorPicture} alt={authorName} />
-                    </Link>
-                    <LikeButton likes={likes} liked={liked} postId={postId} />
+                    <AuthorIcon
+                        onClick={() => navigate(`/user/${authorId}`)}
+                        src={authorPicture}
+                        alt={authorName}
+                    />
+                    <LikeButton
+                        likes={likes}
+                        liked={liked}
+                        postId={postId} />
                 </AuthorContainer>
                 <ContentContainer>
                     <AuthorName>
-                        <Link to={`/user/${authorId}`}>{authorName}</Link>
+                        <p onClick={() => navigate(`/user/${authorId}`)}>{authorName}</p>
                         { authorId === userId ? (
                             <ButtonsContainer expanded={editing}>
                                 { editing ? (
@@ -184,6 +189,7 @@ const ContentContainer = styled.div`
 `;
 
 const AuthorIcon = styled.img`
+    cursor: pointer;
     margin-right: 16px;
     width: 50px;
     height: 50px;
@@ -204,8 +210,8 @@ const AuthorName = styled.div`
     justify-content: space-between;
 
 
-    > a {
-        text-decoration: none;
+    > p {
+        cursor: pointer;
         color:inherit;
         :hover {
             color: var(--contrastcolor1);
