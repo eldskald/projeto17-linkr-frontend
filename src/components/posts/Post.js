@@ -12,37 +12,7 @@ function Post({
     postId, userId, authorId, authorName, authorPicture, description, liked, likesTotal, metadata
 }) {
     
-    console.log('postId : ',postId)
     const { token } = useContext(UserContext);
-
-    function handleClickHashtag(hashtag) {
-        return;
-    }
-    
-    function parseDescription(text) {
-        let arr = text.split(' ');
-        arr = arr.map((word, index) => {
-            const regex = /^\#[a-zA-Z0-9_]+$/;
-            if (regex.test(word)) {
-                const hashtag = word.replace('#', '');
-                return (
-                    <Hashtag
-                        key={index}
-                        onClick={() => handleClickHashtag(hashtag)}
-                    >
-                        {`${word} `}
-                    </Hashtag>
-                );
-            } else {
-                return (
-                    <span key={index}>
-                        {`${word} `}
-                    </span>
-                )
-            }
-        });
-        return arr;
-    }
 
     return (
         <BaseDiv additional={`height: auto;`}>
@@ -53,10 +23,8 @@ function Post({
                 <PostHeader postId={postId}
                             authorName={authorName}
                             authorId={authorId}
-                            userId={userId}/>
-                <Description>
-                    {parseDescription(description)}
-                </Description>
+                            userId={userId}
+                            description={description}/>
                 <LinkPreview metadata={metadata} />
             </ContentContainer>
         </BaseDiv>
@@ -110,6 +78,5 @@ const Hashtag = styled.span`
     color: var(--textcolor1);
     cursor: pointer;
 `;
-
 
 export default Post;
