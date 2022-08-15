@@ -12,7 +12,7 @@ export default function Hashtag({reloadPosts, hashtag}){
                 {hashtag}
             </HashtagName>
         </ReactTagify>
-    )
+    );
 }
 
 const HashtagName = styled.h4`
@@ -20,9 +20,10 @@ const HashtagName = styled.h4`
     font-size: 19px;
     font-weight: normal;
     margin: -10px 0px 0px 0px;
+    color: var(--textcolor1);
     :hover{
         color: var(--contrastcolor1);
-        transition: 0.2s;
         cursor: pointer;
+        transition: all 0.2s;
     }
-`
+`;

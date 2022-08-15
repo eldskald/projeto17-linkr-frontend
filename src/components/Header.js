@@ -133,7 +133,7 @@ const Container = styled.div`
     height: 72px;
     top: 0px;
     left: 0px;
-    z-index: 2;
+    z-index: 3;
 
     padding: 0px 32px;
     display: flex;
@@ -184,7 +184,7 @@ const DropdownMenu = styled.div`
     position: absolute;
     top: 0px;
     right: 0px;
-    z-index: 1;
+    z-index: 2;
     width: 160px;
     height: 48px;
 
@@ -231,6 +231,7 @@ const SearchBarWrapper = styled.div`
     @media (max-width: 900px) {
         top: 72px;
         padding: 15px 16px 0px 16px;
+        z-index: 1;
     }
 `;
 
