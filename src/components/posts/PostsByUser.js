@@ -5,28 +5,28 @@ import styled from 'styled-components';
 import UserContext from '../../shared/userContext';
 import Header from '../Header';
 import Feed from './Feed';
-import Hashtag from '../hashtags/Hashtag';
+import TrendingHashtags from '../hashtags/TrendingHashtags';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
 function Home() {
 
     const { token } = useContext(UserContext);
-    const {userId}=useParams();
+    const { userId } = useParams();
     const navigate = useNavigate();
+
     const [viewdUser,setViewdUser]=useState({});
     const [posts, setPosts] = useState([]);
-    const [hashtags, setHashtags] = useState([]);
     const [loading, setLoading] = useState('true');
     const [error, setError] = useState(false)
 
     useEffect(() => {
         if (!token) return navigate('/');
         loadUser();
-        loadPostsAndHashtags();
+        loadPosts();
     }, [userId]);
 
-    function loadPostsAndHashtags() {
+    function loadPosts() {
         setLoading('true');
         setPosts([]);
         axios.get(`${API_URL}/posts/${userId}?limit=10&offset=0`,
@@ -43,20 +43,8 @@ function Home() {
                 setLoading('');
                 setError(true);
             });
-
-        axios.get(`${API_URL}/hashtags`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            .then(res => {
-                setHashtags([...res.data]);
-            })
-            .catch(err => {
-                console.log("Error at Home.js useEffect" + err.message);
-            });
     }
+
     function loadUser(){
         const config =({
             headers: {
@@ -94,22 +82,10 @@ function Home() {
                                 posts={posts}
                                 loading={loading}
                                 error={error}
-                                reloadFeed={loadPostsAndHashtags}
+                                reloadFeed={loadPosts}
                             />
                         </Container>
-                        <HashtagFeedDiv>
-                            <TrendingDiv>
-                                <h3>trending</h3>
-                            </TrendingDiv>
-                            <HashtagDiv>
-                                {hashtags.map((h, i)=>(
-                                    <Hashtag
-                                        key={i}
-                                        hashtag={h.name}
-                                    />
-                                ))}
-                            </HashtagDiv>
-                        </HashtagFeedDiv>
+                        <TrendingHashtags />
                     </SubContainer>
                 </SubContainerAll>
             </ContainerAll>
@@ -183,53 +159,6 @@ const Container = styled.div`
     @media (max-width: 612px) {
         width: 100%;
     }
-`;
-
-const HashtagFeedDiv = styled.div`
-    background-color: var(--divcolor1);
-    width: 301px;
-    height: 406px;
-    min-height: 200px;
-    display: flex;
-    flex-direction: column;
-    margin: 0px 0px 0px 25px;
-    font-family: var(--headerfont);
-    font-style: normal;
-    font-weight: 700;
-    font-size: 27px;
-    line-height: 40px;
-    color: var(--textcolor1);
-    border-radius: 16px;
-    position: sticky;
-    top: 72px;
-
-    h3{
-        font-size: 27px;
-        padding: 0px 0px 0px 16px;
-    }
-
-    @media (max-width: 1050px) {
-        display: none;
-    }
-`;
-
-const TrendingDiv = styled.div`
-    border-bottom: 1px solid var(--border);
-    height: 17%;
-    min-height: 50px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    padding: 4px 0px 5px 0px;
-`;
-
-const HashtagDiv = styled.div`
-    padding: 14px 0px 0px 16px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    justify-content: flex-start;
 `;
 
 export default Home;

@@ -6,7 +6,7 @@ import UserContext from '../../shared/userContext';
 import Header from '../Header';
 import Feed from './Feed';
 import NewPost from './NewPost';
-import Hashtag from '../hashtags/Hashtag';
+import TrendingHashtags from '../hashtags/TrendingHashtags';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -16,16 +16,15 @@ function Home() {
     const navigate = useNavigate();
 
     const [posts, setPosts] = useState([]);
-    const [hashtags, setHashtags] = useState([]);
     const [loading, setLoading] = useState('true');
     const [error, setError] = useState(false);
 
     useEffect(() => {
         if (!token) return navigate('/');
-        loadPostsAndHashtags();
+        loadPosts();
     }, []);
 
-    function loadPostsAndHashtags() {
+    function loadPosts() {
         setLoading('true');
         setPosts([]);
         axios.get(`${API_URL}/posts?limit=10&offset=0`,
@@ -42,19 +41,6 @@ function Home() {
                 setLoading('');
                 setError(true)
             });
-
-        axios.get(`${API_URL}/hashtags`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            .then(res => {
-                setHashtags([...res.data]);
-            })
-            .catch(err => {
-                console.log("Error at Home.js useEffect" + err.message);
-            });
     }
 
     return (
@@ -65,28 +51,15 @@ function Home() {
                     <TitleWrapper>timeline</TitleWrapper>
                     <SubContainer>
                         <Container>
-                            <NewPost reloadPosts={loadPostsAndHashtags} />
+                            <NewPost reloadPosts={loadPosts} />
                             <Feed
                                 posts={posts}
                                 loading={loading}
                                 error={error}
-                                reloadFeed={loadPostsAndHashtags}
+                                reloadFeed={loadPosts}
                             />
                         </Container>
-                        <HashtagFeedDiv>
-                            <TrendingDiv>
-                                <h3>trending</h3>
-                            </TrendingDiv>
-                            <HashtagDiv>
-                                {hashtags.map((h, i)=>(
-                                    <Hashtag
-                                        key={i}
-                                        hashtag={h.name}
-                                        reloadPosts={loadPostsAndHashtags}
-                                    />
-                                ))}
-                            </HashtagDiv>
-                        </HashtagFeedDiv>
+                        <TrendingHashtags />
                     </SubContainer>
                 </SubContainerAll>
             </ContainerAll>
