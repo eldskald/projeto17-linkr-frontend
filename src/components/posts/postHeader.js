@@ -139,6 +139,7 @@ function PostHeader(props) {
     );
 }
 
+
 // const EnterButton = styled.button`
 //     /* visibility: hidden; */
 // `
