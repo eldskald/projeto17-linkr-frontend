@@ -4,7 +4,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import Post from './Post';
 import UserContext from '../../shared/userContext';
 
-function Feed({ posts, loading, error }) {
+function Feed({ posts, loading, error, reloadFeed }) {
     const { user } = useContext(UserContext);
 
     return (
@@ -33,6 +33,7 @@ function Feed({ posts, loading, error }) {
                     metadata={post.metadata}
                     postId={post.postId}
                     authorId={post.authorId}
+                    reloadFeed={reloadFeed}
                 />
             ))}
         </Container>

@@ -14,7 +14,7 @@ import { IoSend } from 'react-icons/io5';
 const API_URL = process.env.REACT_APP_API_URL;
 
 function Post({
-    postId, userId, authorId, authorName, authorPicture, description, liked, likes, metadata
+    postId, userId, authorId, authorName, authorPicture, description, liked, likes, metadata, reloadFeed
 }) {
     const navigate = useNavigate();
     const { token } = useContext(UserContext);
@@ -65,20 +65,36 @@ function Post({
                     Authorization: `Bearer ${token}`
                 }
             })
-            .then(res => {
+            .then(() => {
                 setSubmitting(false);
                 setDescState(newDesc);
                 setEditing(false);
             })
             .catch(() => {
-                setMessage('Erro! Try again later.');
+                setMessage('Error! Try again later.');
                 setSubmitting(false);
                 setEditing(false);
             })
     }
 
     function handleDelete() {
-        axios.delete(``)
+        setSubmitting(true);
+        axios.delete(`${API_URL}/delete/${postId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            .then(() => {
+                setSubmitting(false);
+                setDeleting(false);
+                reloadFeed();
+            })
+            .catch(() => {
+                setMessage('Error! Try again later.');
+                setSubmitting(false);
+                setDeleting(false);
+            })
     }
 
     return (
@@ -132,6 +148,21 @@ function Post({
                 </ContentContainer>
             </BaseDiv>
             <Alert error={message} setError={setMessage} button={true} />
+            { deleting ? (
+                <DeletePopupBackground>
+                    <DeletePopup>
+                        <p>Are you sure you want<br/>to delete this post?</p>
+                        <div>
+                            <CancelButton onClick={() => setDeleting(false)}>
+                                <p>No, go back</p>
+                            </CancelButton>
+                            <DeleteButton onClick={handleDelete}>
+                                <p>Yes, delete it</p>
+                            </DeleteButton>
+                        </div>
+                    </DeletePopup>
+                </DeletePopupBackground>
+            ) : (<></>)}
         </>
     );
 }
@@ -237,6 +268,76 @@ const Hashtag = styled.span`
 
     :hover {
         color: var(--contrastcolor1);
+    }
+`;
+
+const DeletePopupBackground = styled.div`
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 5;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const DeletePopup = styled.div`
+    opacity: 1;
+    border-radius: 16px;
+    background: var(--divcolor1);
+    box-sizing: border-box;
+    padding: 32px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    > p {
+        font-family: var(--scriptfont);
+        color: var(--textcolor1);
+        text-align: center;
+        font-size: 25px;
+    }
+
+    > div {
+        margin-top: 32px;
+        display: flex;
+        justify-content: space-around;
+    }
+`;
+
+const DeleteButton = styled.div`
+    padding: 12px 36px;
+    background-color: var(--contrastcolor1);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    > p {
+        font-family: var(--scriptfont);
+        color: var(--textcolor1);
+        font-size: 20px;
+    }
+`;
+
+const CancelButton = styled.div`
+    margin: 0px 32px;
+    padding: 12px 36px;
+    background-color: var(--divcolor4);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    > p {
+        font-family: var(--scriptfont);
+        color: var(--contrastcolor1);
+        font-size: 20px;
     }
 `;
 

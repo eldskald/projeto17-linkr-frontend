@@ -64,7 +64,12 @@ function Home() {
                     <SubContainer>
                         <Container>
                             <NewPost reloadPosts={loadPostsAndHashtags} />
-                            <Feed posts={posts} loading={loading} error={error} />
+                            <Feed
+                                posts={posts}
+                                loading={loading}
+                                error={error}
+                                reloadFeed={loadPostsAndHashtags}
+                            />
                         </Container>
                         <HashtagFeedDiv>
                             <TrendingDiv>

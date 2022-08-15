@@ -88,7 +88,12 @@ function Home() {
                     </TitleWrapper>
                     <SubContainer>
                         <Container>
-                            <Feed posts={posts} loading={loading} error={error} />
+                            <Feed
+                                posts={posts}
+                                loading={loading}
+                                error={error}
+                                reloadFeed={loadPostsAndHashtags}
+                            />
                         </Container>
                         <HashtagFeedDiv>
                             <TrendingDiv>
