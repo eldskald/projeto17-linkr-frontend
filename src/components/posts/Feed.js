@@ -1,8 +1,12 @@
+import { useContext } from 'react';
 import styled from 'styled-components';
 import ClipLoader from 'react-spinners/ClipLoader';
 import Post from './Post';
+import UserContext from '../../shared/userContext';
 
 function Feed({ posts, loading, error }) {
+    const { user } = useContext(UserContext);
+
     return (
         <Container>
             <SpinnerWrapper loading={loading}>
@@ -20,6 +24,7 @@ function Feed({ posts, loading, error }) {
             {posts.map((post, index) => (
                 <Post 
                     key={index}
+                    userId={user.id}
                     authorName={post.authorName}
                     authorPicture={post.authorPicture}
                     description={post.description}

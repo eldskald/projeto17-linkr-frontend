@@ -1,14 +1,29 @@
-import React from 'react';
+import { useState, useContext } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import BaseDiv from '../../styles/baseDiv';
+import Alert from '../Alert';
 import LikeButton from './LikeButton';
 import LinkPreview from './LinkPreview';
-import { useNavigate,Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import UserContext from '../../shared/userContext';
+import { RiEdit2Fill } from 'react-icons/ri';
+import { FaTrash } from 'react-icons/fa';
+import { IoSend } from 'react-icons/io5';
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 function Post({
-    authorName, authorPicture, description, liked, likes, metadata,postId,authorId
+    postId, userId, authorId, authorName, authorPicture, description, liked, likes, metadata
 }) {
     const navigate = useNavigate();
+    const { token } = useContext(UserContext);
+    const [descState, setDescState] = useState(description);
+    const [editing, setEditing] = useState(false);
+    const [newDesc, setNewDesc] = useState(description);
+    const [deleting, setDeleting] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
+    const [message, setMessage] = useState('');
 
     function handleClickHashtag(hashtag) {
         navigate(`/hashtag/${hashtag}`);
@@ -39,27 +54,85 @@ function Post({
         return arr;
     }
 
+    function handleEdit() {
+        setSubmitting(true);
+        axios.put(`${API_URL}/edit/${postId}`,
+            {
+                description: newDesc
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            .then(res => {
+                setSubmitting(false);
+                setDescState(newDesc);
+                setEditing(false);
+            })
+            .catch(() => {
+                setMessage('Erro! Try again later.');
+                setSubmitting(false);
+                setEditing(false);
+            })
+    }
+
+    function handleDelete() {
+        axios.delete(``)
+    }
+
     return (
-        <BaseDiv
-            additional={`
-                height: auto;
-                margin: 0px 0px 32px 0px;
-            `}
-        >
-            <AuthorContainer>
-                <Link to={`/user/${authorId}`}>
-                    <AuthorIcon src={authorPicture} alt={authorName} />
-                </Link>
-                <LikeButton likes={likes} liked={liked} postId={postId} />
-            </AuthorContainer>
-            <ContentContainer>
-                <AuthorName><Link to={`/user/${authorId}`}>{authorName}</Link></AuthorName>
-                <Description>
-                    {parseDescription(description)}
-                </Description>
-                <LinkPreview metadata={metadata} />
-            </ContentContainer>
-        </BaseDiv>
+        <>
+            <BaseDiv
+                additional={`
+                    height: auto;
+                    margin: 0px 0px 32px 0px;
+                `}>
+                <AuthorContainer>
+                    <Link to={`/user/${authorId}`}>
+                        <AuthorIcon src={authorPicture} alt={authorName} />
+                    </Link>
+                    <LikeButton likes={likes} liked={liked} postId={postId} />
+                </AuthorContainer>
+                <ContentContainer>
+                    <AuthorName>
+                        <Link to={`/user/${authorId}`}>{authorName}</Link>
+                        { authorId === userId ? (
+                            <ButtonsContainer expanded={editing}>
+                                { editing ? (
+                                    <ButtonWrapper onClick={() => handleEdit()}>
+                                        <IoSend/>
+                                    </ButtonWrapper>
+                                ) : (
+                                    <></>
+                                )}
+                                <ButtonWrapper onClick={() => setEditing(!editing)}>
+                                    <RiEdit2Fill/>
+                                </ButtonWrapper>
+                                <ButtonWrapper onClick={() => setDeleting(!deleting)}>
+                                    <FaTrash/>
+                                </ButtonWrapper>
+                            </ButtonsContainer>
+                        ) : (<></>)}
+                    </AuthorName>
+                    { editing ? (
+                        <EditInput
+                            maxLength={255}
+                            placeholder='New description'
+                            value={newDesc}
+                            onChange={e => setNewDesc(e.target.value)}
+                            disabled={submitting}
+                        />
+                    ) : (
+                        <Description>
+                            {parseDescription(descState)}
+                        </Description>
+                    )}
+                    <LinkPreview metadata={metadata} />
+                </ContentContainer>
+            </BaseDiv>
+            <Alert error={message} setError={setMessage} button={true} />
+        </>
     );
 }
 
@@ -92,19 +165,35 @@ const AuthorIcon = styled.img`
 `;
 
 const AuthorName = styled.div`
-    width: fit-content;
     font-family: var(--scriptfont);
     font-size: 20px;
     color: var(--textcolor1);
     transition: color 0.2s;
+    display: flex;
+    justify-content: space-between;
+
 
     > a {
         text-decoration: none;
         color:inherit;
+        :hover {
+            color: var(--contrastcolor1);
+        }
     }
+`;
 
+const ButtonsContainer = styled.div`
+    width: ${props => props.expanded ? "78px" : "52px" };
+    display: flex;
+    justify-content: space-between;
+`;
+
+const ButtonWrapper = styled.div`
+    color: var(--textcolor1);
+    cursor: pointer;
     :hover {
         color: var(--contrastcolor1);
+        transition: all 0.2s;
     }
 `;
 
@@ -113,6 +202,31 @@ const Description = styled.div`
     font-family: var(--scriptfont);
     font-size: 18px;
     color: var(--textcolor2);
+`;
+
+const EditInput = styled.textarea`
+    width: 100%;
+    height: 88px;
+    margin-top: 8px;
+
+    padding: 8px;
+    background-color: var(--divcolor3);
+    border-radius: 4px;
+    border: none;
+    outline: none;
+    resize: none;
+    font-family: var(--scriptfont);
+    font-size: 16px;
+    color: var(--textcolor4);
+    transition: all 0.2s;
+
+    :placeholder {
+        color: var(--textcolor3);
+    }
+
+    :disabled {
+        opacity: 0.5;
+    }
 `;
 
 const Hashtag = styled.span`
