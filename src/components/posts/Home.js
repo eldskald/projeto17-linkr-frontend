@@ -12,9 +12,11 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 function Home() {
 
-    const { token } = useContext(UserContext);
     const navigate = useNavigate();
-
+    const { token } = useContext(UserContext);
+    const { user } = useContext(UserContext)
+    const userId = user.id
+    console.log(' user.id, userId:', user.id, userId)
     const [posts, setPosts] = useState([]);
     const [hashtags, setHashtags] = useState([]);
     const [loading, setLoading] = useState('true');
@@ -24,6 +26,8 @@ function Home() {
         if (!token) return navigate('/');
         loadPostsAndHashtags();
     }, []);
+
+    console.log('posts from listPosts :', posts)
 
     function loadPostsAndHashtags() {
         axios.get(`${API_URL}/posts?limit=10&offset=0`,
