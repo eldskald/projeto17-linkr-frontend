@@ -27,7 +27,8 @@ export default function HashtagPage() {
     }, [hashtag]);
 
     function loadPostsAndHashtags() {
-    
+        setLoading('true');
+        setPosts([]);
         axios.get(`${API_URL}/hashtags/${hashtag}?limit=10&offset=0`,
             {
                 headers: {

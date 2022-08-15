@@ -27,6 +27,8 @@ function Home() {
     }, []);
 
     function loadPostsAndHashtags() {
+        setLoading('true');
+        setPosts([]);
         axios.get(`${API_URL}/posts/${userId}?limit=10&offset=0`,
             {
                 headers: {
