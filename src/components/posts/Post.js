@@ -3,20 +3,23 @@ import BaseDiv from '../../styles/baseDiv';
 import LikeButton from './LikeButton';
 import LinkPreview from './LinkPreview';
 import { useNavigate,Link } from 'react-router-dom';
-import { useContext } from 'react';
+import { useState, useContext } from 'react';
 import UserContext from '../../shared/userContext';
 import PostHeader from './postHeader';
-
-
+import { FaTrash } from 'react-icons/fa';
+import { RiEdit2Fill } from 'react-icons/ri';
 
 function Post({
     postId, userId, authorId, authorName, authorPicture, description, liked, likes, metadata
 }) {
     const navigate = useNavigate();
+    const [editing, setEditing] = useState(false);
+    const [deleting, setDeleting] = useState(false);
 
     function handleClickHashtag(hashtag) {
         navigate(`/hashtag/${hashtag}`);
     }
+
     function parseDescription(text) {
         let arr = text.split(' ');
         arr = arr.map((word, index) => {
@@ -58,15 +61,22 @@ function Post({
                 <LikeButton likes={likes} liked={liked} postId={postId} />
             </AuthorContainer>
             <ContentContainer>
-                <AuthorName><Link to={`/user/${authorId}`}>{authorName}</Link></AuthorName>
+                <AuthorName>
+                    <Link to={`/user/${authorId}`}>{authorName}</Link>
+                    { authorId === userId ? (
+                        <div>
+                            <ButtonWrapper onClick={() => setEditing(!editing)}>
+                                <RiEdit2Fill/>
+                            </ButtonWrapper>
+                            <ButtonWrapper onClick={() => setDeleting(!deleting)}>
+                                <FaTrash/>
+                            </ButtonWrapper>
+                        </div>
+                    ) : (<></>)}
+                </AuthorName>
                 <Description>
                     {parseDescription(description)}
                 </Description>
-                <PostHeader postId={postId}
-                            authorName={authorName}
-                            authorId={authorId}
-                            userId={userId}
-                            description={description}/>
                 <LinkPreview metadata={metadata} />
             </ContentContainer>
         </BaseDiv>
@@ -106,14 +116,30 @@ const AuthorName = styled.div`
     font-size: 20px;
     color: var(--textcolor1);
     transition: color 0.2s;
+    display: flex;
+    justify-content: space-between;
+
+    > div {
+        width: 52px;
+        display: flex;
+        justify-content: space-between;
+    }
 
     > a {
         text-decoration: none;
         color:inherit;
+        :hover {
+            color: var(--contrastcolor1);
+        }
     }
+`;
 
+const ButtonWrapper = styled.div`
+    color: var(--textcolor1);
+    cursor: pointer;
     :hover {
         color: var(--contrastcolor1);
+        transition: all 0.2s;
     }
 `;
 

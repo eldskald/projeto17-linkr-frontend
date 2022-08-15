@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import UserContext from '../shared/userContext';
 import GlobalStyle from '../styles/globalStyle';
-import Hashtag from './hashtags/Hashtag';
 import Landing from './login/Landing';
 import SignUp from './login/SignUp';
 import Home from './posts/Home';

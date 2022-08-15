@@ -15,8 +15,6 @@ function Home() {
     const navigate = useNavigate();
     const { token } = useContext(UserContext);
     const { user } = useContext(UserContext)
-    const userId = user.id
-    console.log(' user.id, userId:', user.id, userId)
     const [posts, setPosts] = useState([]);
     const [hashtags, setHashtags] = useState([]);
     const [loading, setLoading] = useState('true');
