@@ -93,6 +93,7 @@ const AuthorIcon = styled.img`
 `;
 
 const AuthorName = styled.div`
+    width: fit-content;
     font-family: var(--scriptfont);
     font-size: 20px;
     color: var(--textcolor1);

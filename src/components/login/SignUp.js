@@ -17,6 +17,7 @@ function SignUp() {
     const [userName, setUserName]=useState("");
     const [isDisabled, setDisabled]=useState(false);
     const [error, setError] = useState("");
+    const [success, setSuccess] = useState(false);
     const navigation=useNavigate();
     const { token, setToken } =useContext(UserContext);
 
@@ -48,6 +49,7 @@ function SignUp() {
         const request = axios.post(process.env.REACT_APP_API_URL + "/signup", submitObject)
         request.then(response=>{
             if(response.status===201){       
+                setSuccess(true);
                 setError('Success! Redirecting to login...')
                 setTimeout(() => navigation('/'), 3000)
             }
@@ -83,7 +85,7 @@ function SignUp() {
                         <Link to="/">Switch back to log in</Link>
                     </Form>
                 </LogDiv>
-                <Alert error={error} setError={setError} />
+                <Alert error={error} setError={setError} button={!success} />
             </Container>
         </>
     );

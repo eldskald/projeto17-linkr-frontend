@@ -28,7 +28,7 @@ export default function HashtagPage() {
 
     function loadPostsAndHashtags() {
     
-        axios.get(`${API_URL}/hashtags/${hashtag}`,
+        axios.get(`${API_URL}/hashtags/${hashtag}?limit=10&offset=0`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -151,7 +151,7 @@ const HashtagFeedDiv = styled.div`
     min-height: 200px;
     display: flex;
     flex-direction: column;
-    margin: 195px 0px 0px 25px;
+    margin: 0px 0px 0px 25px;
     font-family: var(--headerfont);
     font-style: normal;
     font-weight: 700;
@@ -159,8 +159,7 @@ const HashtagFeedDiv = styled.div`
     line-height: 40px;
     color: var(--textcolor1);
     position: sticky;
-    top: 10px;
-    right: 70px;
+    top: 94px;
     border-radius: 16px;
     h3{
         font-size: 27px;

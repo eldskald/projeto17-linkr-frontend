@@ -116,7 +116,7 @@ function Landing() {
                         <Link to="/sign-up/">First time? Create an account!</Link>
                     </Form>
                 </LoginDiv>
-                <Alert error={error} setError={setError} />
+                <Alert error={error} setError={setError} button={true} />
             </Container>
         </>
     );

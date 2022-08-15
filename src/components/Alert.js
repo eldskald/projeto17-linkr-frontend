@@ -22,7 +22,11 @@ export default function Alert(props){
         <BackgroundFade displaying={displaying}>
             <Message>
                 {errorMessage.map(error=><Error error={error} />)}
-                <Button onClick={cleanError}>OK</Button>
+                { props.button ? (
+                    <Button onClick={cleanError}>OK</Button>
+                ) : (
+                    <></>
+                )}
             </Message>
         </BackgroundFade>
     );
@@ -45,23 +49,23 @@ align-items: center;
 `;
 const Message=styled.div`
 opacity: 1;
-border-radius: 25px;
+border-radius: 16px;
 background: var(--divcolor4);
 box-sizing: border-box;
-padding: 15px;
+padding: 16px 32px;
 display: flex;
 align-items: center;
 flex-direction: column;
 p{
     font-family: var(--scriptfont);
     font-size: 25px;
-    margin-bottom: 5px;
 }
 `;
 
 const Button= styled.button`
 border-style: none;
 background: var(--buttonbg);
+margin-top: 16px;
 font-family: var(--headerfont);
 font-style: normal;
 font-weight: 700;
