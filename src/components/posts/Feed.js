@@ -39,8 +39,9 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
 
-    @media (min-width: 612px) {
-        min-width: 100%;
+
+    @media (max-width: 612px) {
+        width: 100%;
     }
 `;
 
@@ -53,7 +54,7 @@ const ErrorContainer = styled.div`
     margin-top: 32px;
     font-family: var(--scriptfont);
     font-size: 20px;
-    text-alignment: center;
+    text-align: center;
     color: var(--contrastcolor2);
 `;
 

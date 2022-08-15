@@ -28,7 +28,10 @@ const Container = styled.a`
 
     :hover {
         border: 2px solid var(--contrastcolor1);
-    }
+    }    
+
+
+
 `;
 
 const ImgWrapper = styled.img`
@@ -50,32 +53,31 @@ const InfoWrapper = styled.div`
 const InfoTitle = styled.div`
     width: 100%;
     margin-bottom: 16px;
-    
+    height:30px;
     font-family: var(--scriptfont);
     font-size: 16px;
     color: var(--textcolor2);
-    text-overflow: ellipsis;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
     -webkit-box-orient: vertical;
+
 `;
 
 const InfoDescription = styled.div`
     width: 100%;
     flex-grow: 1;
-
+    height:50px;
     font-family: var(--scriptfont);
     font-size: 14px;
     color: var(--textcolor3);
-    text-overflow: ellipsis;
     overflow: hidden;
+
 `;
 
 const LinkWrapper = styled.div`
-    width: 100%;
-
+    height: 19px;
     display: -webkit-box;
     font-family: var(--scriptfont);
     font-size: 16px;
@@ -85,6 +87,7 @@ const LinkWrapper = styled.div`
     -webkit-line-clamp: 2;
     line-clamp: 2;
     -webkit-orient: vertical;
+    word-break: break-all;
 `;
 
 export default LinkPreview;

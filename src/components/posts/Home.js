@@ -92,33 +92,36 @@ const ContainerAll = styled.div`
     display: flex;
     justify-content: center;
     overflow-y: scroll;
+    @media (max-width: 612px) {
+        width: 100%;
+    }
 `;
 
 const SubContainerAll = styled.div`
-    height: 100%;
+    
     padding-top: 72px;
     display: flex;
     flex-direction: column;
     align-items: center;
-
     @media (max-width: 900px) {
         padding-top: 144px;
+    }
+    @media (max-width: 612px) {
+        width: 100%;
     }
 `;
 
 const TitleWrapper = styled.div`
-    width: 100%;
+
+    width:calc(100% - 32px);  
     height: 64px;
-    margin: 42px 0px 24px 0px;
-    
+    margin: 42px 0 24px 32px;
     font-family: var(--headerfont);
     font-weight: 700;
     font-size: 42px;
     color: var(--textcolor1);
 
     @media (max-width: 612px) {
-        width: 100%;
-        padding-left: 32px;
         margin-top: 32px;
     }
 `;
@@ -127,6 +130,9 @@ const SubContainer = styled.div`
     margin-top: 16px;
     width: fit-content;
     display: flex;
+    @media (max-width: 612px) {
+        width: 100%;
+    }
 `;
 
 const Container = styled.div`
@@ -135,6 +141,9 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    @media (max-width: 612px) {
+        width: 100%;
+    }
 `;
 
 const HashtagFeedDiv = styled.div`
