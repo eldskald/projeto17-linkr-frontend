@@ -17,11 +17,29 @@ function Home() {
 
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState('true');
+    const [isFollowing, setIsFollowing] = useState(false);
     const [error, setError] = useState(false);
 
     useEffect(() => {
         if (!token) return navigate('/');
-        loadPosts();
+        axios.get(`${API_URL}/total-follows`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(res => {
+                if (res.data > 0) {
+                    setIsFollowing(true);
+                    loadPosts();
+                } else {
+                    setIsFollowing(false);
+                    setLoading('');
+                }
+            })
+            .catch(() => {
+                setLoading('');
+                setError(true);
+            });
     }, []);
 
     function loadPosts() {
@@ -52,12 +70,36 @@ function Home() {
                     <SubContainer>
                         <Container>
                             <NewPost reloadPosts={loadPosts} />
-                            <Feed
-                                posts={posts}
-                                loading={loading}
-                                error={error}
-                                reloadFeed={loadPosts}
-                            />
+                            {loading ? (
+                                <Feed
+                                    posts={[]}
+                                    loading={loading}
+                                    error={false}
+                                    reloadFeed={loadPosts}
+                                />
+                            ) : (
+                                isFollowing ? (
+                                    posts.length > 0 ? (
+                                        <Feed
+                                            posts={posts}
+                                            loading={loading}
+                                            error={error}
+                                            reloadFeed={loadPosts}
+                                        />
+                                    ) : (
+                                        <EmptyFeed>
+                                            <p>
+                                                No posts found from your friends.
+                                            </p>
+                                        </EmptyFeed>
+                                )) : (
+                                    <EmptyFeed>
+                                        <p>
+                                            You don't follow anyone yet.<br/>
+                                            Search for new friends!
+                                        </p>
+                                    </EmptyFeed>
+                            ))}
                         </Container>
                         <TrendingHashtags />
                     </SubContainer>
@@ -126,51 +168,18 @@ const Container = styled.div`
     }
 `;
 
-const HashtagFeedDiv = styled.div`
-    background-color: var(--divcolor1);
-    width: 301px;
-    height: 406px;
-    min-height: 200px;
-    display: flex;
-    flex-direction: column;
-    margin: 0px 0px 0px 25px;
-    font-family: var(--headerfont);
-    font-style: normal;
-    font-weight: 700;
-    font-size: 27px;
-    line-height: 40px;
-    color: var(--textcolor1);
-    border-radius: 16px;
-    position: sticky;
-    top: 94px;
-
-    h3{
-        font-size: 27px;
-        padding: 0px 0px 0px 16px;
-    }
-
-    @media (max-width: 1050px) {
-        display: none;
-    }
-`;
-
-const TrendingDiv = styled.div`
-    border-bottom: 1px solid var(--border);
-    height: 17%;
-    min-height: 50px;
-    width: 100%;
+const EmptyFeed = styled.div`
+    padding-top: 32px;
     display: flex;
     align-items: center;
-    padding: 4px 0px 5px 0px;
-`;
-
-const HashtagDiv = styled.div`
-    padding: 14px 0px 0px 16px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    justify-content: flex-start;
+    justify-content: center;
+    
+    > p {
+        font-family: var(--scriptfont);
+        font-size: 20px;
+        color: var(--textcolor2);
+        text-align: center;
+    }
 `;
 
 export default Home;
