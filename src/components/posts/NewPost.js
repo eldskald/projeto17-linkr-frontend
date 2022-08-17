@@ -29,6 +29,8 @@ function NewPost({ reloadPosts }) {
                 }
             })
             .then(() => {
+                setLink('');
+                setDescription('');
                 setSubmitting(false);
                 reloadPosts();
             })
