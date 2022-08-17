@@ -13,11 +13,12 @@ export default function HashtagPage() {
 
     const { token } = useContext(UserContext);
     const navigate = useNavigate();
+    const {hashtag} = useParams();
 
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState('true');
     const [error, setError] = useState(false);
-    let {hashtag} = useParams();
+    const [trendingTagsReloader, setTrendingTagsReloader] = useState(true);
 
     useEffect(() => {
         if (!token) return navigate('/');
@@ -26,6 +27,8 @@ export default function HashtagPage() {
 
     function loadPosts() {
         setLoading('true');
+        setError(false);
+        setTrendingTagsReloader(!trendingTagsReloader)
         setPosts([]);
         axios.get(`${API_URL}/hashtags/${hashtag}?limit=10&offset=0`,
             {
@@ -58,7 +61,7 @@ export default function HashtagPage() {
                                 reloadFeed={loadPosts}
                             />
                         </Container>
-                        <TrendingHashtags />
+                        <TrendingHashtags reload={trendingTagsReloader} />
                     </SubContainer>
                 </SubContainerAll>
             </ContainerAll>

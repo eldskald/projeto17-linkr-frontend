@@ -22,6 +22,7 @@ function Home() {
     const [error, setError] = useState(false)
     const [userError, setUserError] = useState('');
     const [popup, setPopup] = useState('');
+    const [trendingTagsReloader, setTrendingTagsReloader] = useState(true);
 
     useEffect(() => {
         if (!token) return navigate('/');
@@ -31,6 +32,8 @@ function Home() {
 
     function loadPosts() {
         setLoading('true');
+        setError(false);
+        setTrendingTagsReloader(!trendingTagsReloader)
         setPosts([]);
         axios.get(`${API_URL}/posts/${viewedUserId}?limit=10&offset=0`,
             {
@@ -141,7 +144,7 @@ function Home() {
                                 reloadFeed={loadPosts}
                             />
                         </Container>
-                        <TrendingHashtags />
+                        <TrendingHashtags reload={trendingTagsReloader} />
                     </SubContainer>
                 </SubContainerAll>
             </ContainerAll>

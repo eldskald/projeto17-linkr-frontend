@@ -110,6 +110,11 @@ function Header() {
                                         alt={user.name}
                                     />
                                     <p>{user.name}</p>
+                                    {user.following ? (
+                                        <div>
+                                            • following
+                                        </div>
+                                    ) : (<></>)}
                                 </div>
                             </SearchResult>
                         ))}
@@ -320,6 +325,14 @@ const SearchResult = styled.button`
             font-family: var(--scriptfont);
             font-size: 18px;
             transition: color 0.2s;
+        }
+
+        > div {
+            margin-left: 8px;
+            color: var(--textcolor3);
+            font-family: var(--scriptfont);
+            font-size: 18px;
+            word-spacing: 4px;
         }
     }
     
