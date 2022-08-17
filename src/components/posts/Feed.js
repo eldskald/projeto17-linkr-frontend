@@ -33,6 +33,9 @@ function Feed({ posts, loading, error, reloadFeed }) {
                     metadata={post.metadata}
                     postId={post.postId}
                     authorId={post.authorId}
+                    reposterName={post.reposterId===user.id? "You" : post.reposterName}    
+                    reposterId={post.reposterId}
+                    reposts={post.repostCount ? post.repostCount : 0}                
                     reloadFeed={reloadFeed}
                 />
             ))}
