@@ -4,17 +4,19 @@ import styled from 'styled-components';
 import BaseDiv from '../../styles/baseDiv';
 import Alert from '../Alert';
 import LikeButton from './LikeButton';
+import RepostButton from './RespostButton';
 import LinkPreview from './LinkPreview';
 import { useNavigate, Link } from 'react-router-dom';
 import UserContext from '../../shared/userContext';
 import { RiEdit2Fill } from 'react-icons/ri';
 import { FaTrash } from 'react-icons/fa';
 import { IoSend } from 'react-icons/io5';
+import { BiRepost } from "react-icons/bi";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
 function Post({
-    postId, userId, authorId, authorName, authorPicture, description, liked, likes, metadata, reloadFeed
+    postId, userId, authorId, authorName, authorPicture, description, liked, likes, metadata, reloadFeed, reposts,reposterName,reposterId
 }) {
     const navigate = useNavigate();
     const { token } = useContext(UserContext);
@@ -98,59 +100,66 @@ function Post({
     }
 
     return (
-        <>
+        <> 
             <BaseDiv
                 additional={`
                     height: auto;
                     margin: 0px 0px 32px 0px;
+                    flex-direction: column;
                 `}>
-                <AuthorContainer>
-                    <AuthorIcon
-                        onClick={() => navigate(`/user/${authorId}`)}
-                        src={authorPicture}
-                        alt={authorName}
-                    />
-                    <LikeButton
-                        likes={likes}
-                        liked={liked}
-                        postId={postId} />
-                </AuthorContainer>
-                <ContentContainer>
-                    <AuthorName>
-                        <p onClick={() => navigate(`/user/${authorId}`)}>{authorName}</p>
-                        { authorId === userId ? (
-                            <ButtonsContainer expanded={editing}>
-                                { editing ? (
-                                    <ButtonWrapper onClick={() => handleEdit()}>
-                                        <IoSend/>
-                                    </ButtonWrapper>
-                                ) : (
-                                    <></>
-                                )}
-                                <ButtonWrapper onClick={() => setEditing(!editing)}>
-                                    <RiEdit2Fill/>
-                                </ButtonWrapper>
-                                <ButtonWrapper onClick={() => setDeleting(!deleting)}>
-                                    <FaTrash/>
-                                </ButtonWrapper>
-                            </ButtonsContainer>
-                        ) : (<></>)}
-                    </AuthorName>
-                    { editing ? (
-                        <EditInput
-                            maxLength={255}
-                            placeholder='New description'
-                            value={newDesc}
-                            onChange={e => setNewDesc(e.target.value)}
-                            disabled={submitting}
+                {reposterName ? <ReposterTitle><BiRepost/><h1> Reposted By <b>{` ${reposterName}`}</b></h1></ReposterTitle>:''}
+                <ContainerWrapper>
+                    <AuthorContainer>
+                        <AuthorIcon
+                            onClick={() => navigate(`/user/${authorId}`)}
+                            src={authorPicture}
+                            alt={authorName}
                         />
-                    ) : (
-                        <Description>
-                            {parseDescription(descState)}
-                        </Description>
-                    )}
-                    <LinkPreview metadata={metadata} />
-                </ContentContainer>
+                        <LikeButton
+                            likes={likes}
+                            liked={liked}
+                            postId={postId} />
+                        <RepostButton
+                            reposts={reposts}
+                            postId={postId} />                        
+                    </AuthorContainer>
+                    <ContentContainer>
+                        <AuthorName>
+                            <p onClick={() => navigate(`/user/${authorId}`)}>{authorName}</p>
+                            { authorId === userId ? (
+                                <ButtonsContainer expanded={editing}>
+                                    { editing ? (
+                                        <ButtonWrapper onClick={() => handleEdit()}>
+                                            <IoSend/>
+                                        </ButtonWrapper>
+                                    ) : (
+                                        <></>
+                                    )}
+                                    <ButtonWrapper onClick={() => setEditing(!editing)}>
+                                        <RiEdit2Fill/>
+                                    </ButtonWrapper>
+                                    <ButtonWrapper onClick={() => setDeleting(!deleting)}>
+                                        <FaTrash/>
+                                    </ButtonWrapper>
+                                </ButtonsContainer>
+                            ) : (<></>)}
+                        </AuthorName>
+                        { editing ? (
+                            <EditInput
+                                maxLength={255}
+                                placeholder='New description'
+                                value={newDesc}
+                                onChange={e => setNewDesc(e.target.value)}
+                                disabled={submitting}
+                            />
+                        ) : (
+                            <Description>
+                                {parseDescription(descState)}
+                            </Description>
+                        )}
+                        <LinkPreview metadata={metadata} />
+                    </ContentContainer>
+                </ContainerWrapper>
             </BaseDiv>
             <Alert error={message} setError={setMessage} button={true} />
             { deleting ? (
@@ -171,6 +180,26 @@ function Post({
         </>
     );
 }
+const ContainerWrapper = styled.div`
+display: flex;
+`;
+const ReposterTitle=styled.div`
+color:var(--textcolor1);
+
+margin-bottom:10px;
+display: flex;
+align-items: center;
+svg{
+    font-size: 20px;
+}
+h1{
+    font-family: var(--scriptfont);
+    font-size: 13px;
+}
+b{
+    font-weight: 700;
+}
+`;
 
 const AuthorContainer = styled.div`
     height: 100%;
