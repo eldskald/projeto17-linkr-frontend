@@ -19,6 +19,7 @@ function Home() {
     const [loading, setLoading] = useState('true');
     const [isFollowing, setIsFollowing] = useState(false);
     const [error, setError] = useState(false);
+    const [trendingTagsReloader, setTrendingTagsReloader] = useState(true);
 
     useEffect(() => {
         if (!token) return navigate('/');
@@ -44,6 +45,8 @@ function Home() {
 
     function loadPosts() {
         setLoading('true');
+        setError(false);
+        setTrendingTagsReloader(!trendingTagsReloader)
         setPosts([]);
         axios.get(`${API_URL}/posts?limit=10&offset=0`,
             {
@@ -79,19 +82,19 @@ function Home() {
                                 />
                             ) : (
                                 isFollowing ? (
-                                    posts.length > 0 ? (
+                                    posts.length === 0 && !error ? (
+                                        <EmptyFeed>
+                                            <p>
+                                                No posts found from your friends.
+                                            </p>
+                                        </EmptyFeed>
+                                    ) : (
                                         <Feed
                                             posts={posts}
                                             loading={loading}
                                             error={error}
                                             reloadFeed={loadPosts}
                                         />
-                                    ) : (
-                                        <EmptyFeed>
-                                            <p>
-                                                No posts found from your friends.
-                                            </p>
-                                        </EmptyFeed>
                                 )) : (
                                     <EmptyFeed>
                                         <p>
@@ -101,7 +104,7 @@ function Home() {
                                     </EmptyFeed>
                             ))}
                         </Container>
-                        <TrendingHashtags />
+                        <TrendingHashtags reload={trendingTagsReloader} />
                     </SubContainer>
                 </SubContainerAll>
             </ContainerAll>

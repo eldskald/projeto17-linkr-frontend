@@ -67,8 +67,8 @@ function Post({
             })
             .then(() => {
                 setSubmitting(false);
-                setDescState(newDesc);
                 setEditing(false);
+                reloadFeed();
             })
             .catch(() => {
                 setMessage('Error! Try again later.');

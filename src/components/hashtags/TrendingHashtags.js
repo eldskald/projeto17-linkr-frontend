@@ -6,7 +6,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-function TrendingHashtags() {
+function TrendingHashtags({ reload }) {
 
     const navigate = useNavigate();
 
@@ -33,7 +33,7 @@ function TrendingHashtags() {
             unmounted = true;
             source.cancel();
         };
-    }, []);
+    }, [reload]);
 
     return (
         <HashtagFeedDiv>
