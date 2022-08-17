@@ -9,7 +9,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 function Header() {
     const navigate = useNavigate();
-    const { user, setUser, setToken } = useContext(UserContext);
+    const { user, setUser, token, setToken } = useContext(UserContext);
 
     const [dropdown, setDropdown] = useState(false);
     const [search, setSearch] = useState('');
@@ -34,11 +34,17 @@ function Header() {
     function onSearch(string) {
         if (string === '') {
             setSearch('');
+            setSearchResults([]);
             return;
         }
 
         setSearchId((searchId + 1) % 1000);
-        axios.get(`${API_URL}/search?str=${string}&id=${searchId}`)
+        axios.get(`${API_URL}/search?str=${string}&id=${searchId}`, 
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
             .then(res => {
                 if (searchId != res.data.id) return;
                 setSearchResults([...res.data.results]);
