@@ -21,7 +21,7 @@ export default function Alert(props){
     return(
         <BackgroundFade displaying={displaying}>
             <Message>
-                {errorMessage.map(error=><Error error={error} />)}
+                {errorMessage.map((error, index) => <Error key={index} error={error} />)}
                 { props.button ? (
                     <Button onClick={cleanError}>OK</Button>
                 ) : (

@@ -6,30 +6,33 @@ import UserContext from '../../shared/userContext';
 import Header from '../Header';
 import Feed from './Feed';
 import TrendingHashtags from '../hashtags/TrendingHashtags';
+import Alert from '../Alert';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
 function Home() {
 
-    const { token } = useContext(UserContext);
-    const { userId } = useParams();
+    const { token, user } = useContext(UserContext);
+    const { userId: viewedUserId } = useParams();
     const navigate = useNavigate();
 
-    const [viewdUser,setViewdUser]=useState({});
+    const [viewedUser,setViewedUser]=useState({});
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState('true');
     const [error, setError] = useState(false)
+    const [userError, setUserError] = useState('');
+    const [popup, setPopup] = useState('');
 
     useEffect(() => {
         if (!token) return navigate('/');
         loadUser();
         loadPosts();
-    }, [userId]);
+    }, [viewedUserId]);
 
     function loadPosts() {
         setLoading('true');
         setPosts([]);
-        axios.get(`${API_URL}/posts/${userId}?limit=10&offset=0`,
+        axios.get(`${API_URL}/posts/${viewedUserId}?limit=10&offset=0`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -51,21 +54,48 @@ function Home() {
                 "Authorization": `Bearer ${token}`
             }
         });
-        const request = axios.get(API_URL + "/getuser/"+userId, config)
+        const request = axios.get(API_URL + "/getuser/"+viewedUserId, config)
         request.then(response=>{
         if(response.status===200){
-            setViewdUser(response.data); 
+                setViewedUser(response.data); 
             }
          })
          request.catch(err=>{
-             if(err.response.status===404){
-                alert("404 user not found")
-             }
-             else if(err.response.status===401){
-                alert("invalid Session")
-             }
+                setUserError(err.response.data);
          });
      };
+
+    function handleFollow() {
+        axios.post(`${API_URL}/follow/${viewedUserId}`, {},
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            .then(() => {
+                setPopup(`You are now following ${viewedUser.name}!`);
+                setViewedUser({ ...viewedUser, following: true });
+            })
+            .catch(() => {
+                setPopup(`Error! Try again later.`);
+            })
+    }
+
+    function handleUnfollow() {
+        axios.delete(`${API_URL}/unfollow/${viewedUserId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            .then(() => {
+                setPopup(`You unfollowed ${viewedUser.name}.`);
+                setViewedUser({ ...viewedUser, following: false });
+            })
+            .catch(() => {
+                setPopup(`Error! Try again later.`)
+            });
+    }
 
     return (
         <>
@@ -73,8 +103,34 @@ function Home() {
             <ContainerAll>
                 <SubContainerAll>
                     <TitleWrapper>
-                        <AvatarImg src={viewdUser.profilePictureUrl} alt={viewdUser.name} /> 
-                        <h1>{viewdUser.name}'s posts</h1>
+                        { userError ? (
+                            <UserErrorMessage>
+                                {userError}
+                            </UserErrorMessage>
+                        ) : (
+                            <>
+                                <UserWrapper>
+                                    <AvatarImg
+                                        src={viewedUser.profilePictureUrl}
+                                        alt={viewedUser.name}
+                                    /> 
+                                    <h1>{viewedUser.name}'s posts</h1>
+                                </UserWrapper>
+                                { viewedUserId == user.id ? (
+                                    <></>
+                                ) : (
+                                    viewedUser.following ? (
+                                        <FollowButton onClick={handleUnfollow}>
+                                            Unfollow
+                                        </FollowButton>
+                                    ) : (
+                                        <FollowButton onClick={handleFollow}>
+                                            Follow
+                                        </FollowButton>
+                                    )
+                                )}
+                            </>
+                        )}
                     </TitleWrapper>
                     <SubContainer>
                         <Container>
@@ -89,6 +145,7 @@ function Home() {
                     </SubContainer>
                 </SubContainerAll>
             </ContainerAll>
+            <Alert error={popup} setError={setPopup} button={true} />
         </>
     );
 }
@@ -126,20 +183,49 @@ const TitleWrapper = styled.div`
     margin: 42px 0px 24px 0px;
     align-items: center;
     display: flex;
-    justify-content: left;
+    justify-content: space-between;
     align-items: center;
+    @media (max-width: 612px) {
+        width: 100%;
+        padding-left: 32px;
+        margin-top: 32px;
+    }
+`;
+
+const UserWrapper = styled.div`
+    display: flex;
     h1{
         font-family: var(--headerfont);
         font-weight: 700;
         font-size: 42px;
         color: var(--textcolor1);
     }
-    @media (max-width: 612px) {
-        width: 100%;
-        padding-left: 32px;
-        margin-top: 32px;
+`;
+
+const UserErrorMessage = styled.div`
+    font-family: var(--headerfont);
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--contrastcolor2);
+`;
+
+const FollowButton = styled.div`
+    width: 128px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--contrastcolor1);
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: var(--scriptfont);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--textcolor1);
+
+    :disabled {
+        cursor: default;
     }
-    
 `;
 
 const SubContainer = styled.div`
