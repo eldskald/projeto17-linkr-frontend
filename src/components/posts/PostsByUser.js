@@ -58,7 +58,6 @@ function Home() {
         request.then(response=>{
         if(response.status===200){
                 setViewedUser(response.data); 
-                console.log(response.data);
             }
          })
          request.catch(err=>{
