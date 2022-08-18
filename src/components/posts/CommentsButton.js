@@ -55,6 +55,7 @@ const Container=styled.div`
     flex-direction: column;
     align-items: center;
     p {
+        white-space: nowrap;
         margin-top: 12px;
         font-family:var(--scriptfont);
         color:var(--textcolor1);
