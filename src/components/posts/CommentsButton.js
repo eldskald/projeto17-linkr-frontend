@@ -29,7 +29,7 @@ function CommentsButton({ expanded, setComments, totalComments, loadComments, lo
                 >
                     <AiOutlineComment
                         color='var(--textcolor1)'
-                        size={35}
+                        size={24}
                     />
                 </Button>
                     <p>{totalComments} comments</p>
@@ -49,7 +49,7 @@ const Container=styled.div`
     align-items: center;
     p {
         white-space: nowrap;
-        margin-top: 12px;
+        margin-top: 8px;
         font-family:var(--scriptfont);
         color:var(--textcolor1);
         font-size: 11px;
