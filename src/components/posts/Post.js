@@ -5,27 +5,44 @@ import BaseDiv from '../../styles/baseDiv';
 import Alert from '../Alert';
 import LikeButton from './LikeButton';
 import RepostButton from './RespostButton';
+import CommentsButton from './CommentsButton';
 import LinkPreview from './LinkPreview';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import UserContext from '../../shared/userContext';
 import { RiEdit2Fill } from 'react-icons/ri';
 import { FaTrash } from 'react-icons/fa';
 import { IoSend } from 'react-icons/io5';
 import { BiRepost } from "react-icons/bi";
+import CommentSection from './CommentSection';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
 function Post({
-    postId, userId, authorId, authorName, authorPicture, description, liked, likes, metadata, reloadFeed, reposts,reposterName,reposterId
+    postId,
+    userId,
+    authorId, 
+    authorName, 
+    authorPicture, 
+    description, 
+    liked, 
+    likes,
+    metadata, 
+    reloadFeed, 
+    reposts,
+    reposterName,
+    reposterId,
+    commentCount
 }) {
     const navigate = useNavigate();
     const { token } = useContext(UserContext);
-    const [descState, setDescState] = useState(description);
+    const [comments, setComments] = useState(false);
+    const [totalComments, setTotalComments] = useState(commentCount);
     const [editing, setEditing] = useState(false);
     const [newDesc, setNewDesc] = useState(description);
     const [deleting, setDeleting] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [message, setMessage] = useState('');
+    const [loadingComments, setLoadingComments] = useState(false);
 
     function handleClickHashtag(hashtag) {
         navigate(`/hashtag/${hashtag}`);
@@ -98,6 +115,25 @@ function Post({
                 setDeleting(false);
             })
     }
+    function loadComments(){
+        setLoadingComments(true);
+        axios.get(`${API_URL}/comments/${postId}?limit=10&offset=0`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        .then(res => {
+            setLoadingComments(false);
+            setComments([...res.data.comments]);
+            setTotalComments(res.data.commentsTotal);
+        })
+        .catch(err => {
+            setLoadingComments(false);
+            setMessage(err.response.data);
+            console.log(err);
+        });
+    }
 
     return (
         <> 
@@ -122,6 +158,12 @@ function Post({
                         <RepostButton
                             reposts={reposts}
                             postId={postId} />                        
+                        <CommentsButton                         
+                            expanded={!!comments}               
+                            setComments={setComments}           
+                            totalComments={totalComments}       
+                            loadComments={loadComments}
+                            loading={loadingComments} />
                     </AuthorContainer>
                     <ContentContainer>
                         <AuthorName>
@@ -154,12 +196,22 @@ function Post({
                             />
                         ) : (
                             <Description>
-                                {parseDescription(descState)}
+                                {parseDescription(description)}
                             </Description>
                         )}
                         <LinkPreview metadata={metadata} />
                     </ContentContainer>
                 </ContainerWrapper>
+                <CommentSection 
+                    expanded={!!comments} 
+                    comments={comments}
+                    postId={postId}
+                    setComments={setComments}
+                    setTotalComments={setTotalComments}
+                    originalAuthor={authorId}
+                    loadComments={loadComments}
+                    loading={loadingComments}
+                />
             </BaseDiv>
             <Alert error={message} setError={setMessage} button={true} />
             { deleting ? (
@@ -203,7 +255,7 @@ b{
 
 const AuthorContainer = styled.div`
     height: 100%;
-
+    width: fit-content;
     padding: 16px 0px;
     display: flex;
     flex-direction: column;
@@ -211,10 +263,10 @@ const AuthorContainer = styled.div`
 `;
 
 const ContentContainer = styled.div`
-    height: 100%;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 `;
 
 const AuthorIcon = styled.img`
