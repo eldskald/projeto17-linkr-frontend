@@ -51,7 +51,7 @@ export default function HashtagPage() {
             <Header />
             <ContainerAll>
                 <SubContainerAll>
-                    <TitleWrapper>{hashtag}</TitleWrapper>
+                    <TitleWrapper>#{hashtag}</TitleWrapper>
                     <SubContainer>
                         <Container>
                             <Feed
