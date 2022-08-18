@@ -116,6 +116,7 @@ function Post({
             })
     }
     function loadComments(){
+        setLoadingComments(true);
         axios.get(`${API_URL}/comments/${postId}?limit=10&offset=0`,
         {
             headers: {
@@ -123,11 +124,12 @@ function Post({
             }
         })
         .then(res => {
+            setLoadingComments(false);
             setComments([...res.data.comments]);
             setTotalComments(res.data.commentsTotal);
         })
         .catch(err => {
-            // setLoading('');
+            setLoadingComments(false);
             setMessage(err.response.data);
             console.log(err);
         });
