@@ -1,16 +1,22 @@
-import { useState, useContext } from 'react';
-import axios from 'axios';
+import { useContext } from 'react';
 import styled from 'styled-components';
 import Comment from './Comment';
 import { IoPaperPlaneOutline } from 'react-icons/io5';
+import ClipLoader from 'react-spinners/ClipLoader';
 import UserContext from '../../shared/userContext';
 
 export default function CommentSection({
-    expanded,postId,comments,setComments,originalAuthor
+    expanded,postId,comments,setComments,originalAuthor,loading
 }){
-    const { user, token } = useContext(UserContext);
+    const { user } = useContext(UserContext);
     return(
         <Wrapper expanded={expanded}>
+            <SpinnerWrapper loading={loading}>
+                <ClipLoader
+                    color={'var(--contrastcolor1)'}
+                    size={50}
+                />
+            </SpinnerWrapper>
             {comments ? (comments.map((comment,index)=>
                 <Comment 
                     key={index}
@@ -30,11 +36,11 @@ export default function CommentSection({
                 </IconWrapper>
                 <InputWrapper>
                     <CommentInput
-                                placeholder={'write a comment'}
-                                //value={"description"}
-                                // onChange={e => setDescription(e.target.value)}
-                                // disabled={submitting}
-                            />
+                        placeholder={'write a comment'}
+                        //value={"description"}
+                        // onChange={e => setDescription(e.target.value)}
+                        // disabled={submitting}
+                    />
                     <SendButton>
                         <IoPaperPlaneOutline />
                     </SendButton>        
@@ -55,6 +61,12 @@ display:flex;
 justify-content: left;
 width: 100%;
 padding-top: 5px;
+`;
+const SpinnerWrapper = styled.div`
+margin: 16px 0px;
+display: flex;
+justify-content: center;
+display: ${props => props.loading ? 'block' : 'none'};
 `;
 const IconWrapper=styled.div`
 width:82px;
@@ -81,6 +93,7 @@ font-size:20px;
 color:var(--textcolor1);
 width:20px;
 margin-right: 15px;
+cursor: pointer;
 `;
 const InputWrapper=styled.div`
 width: calc(100% - 82px);

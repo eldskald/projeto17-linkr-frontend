@@ -1,23 +1,13 @@
-import { useState, useContext } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
 import ReactTooltip from 'react-tooltip';
 import ReactDOMServer from 'react-dom/server';
 import { AiOutlineComment } from 'react-icons/ai';
-import UserContext from '../../shared/userContext';
-import Alert from '../Alert';
 
-const API_URL = process.env.REACT_APP_API_URL;
-
-function CommentsButton({ postId, expanded, setComments, totalComments, setTotalComments,loadComments }) {    
-    const { token, user } = useContext(UserContext);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+function CommentsButton({ expanded, setComments, totalComments, loadComments, loading }) {    
 
     function handleClick() {
         if (expanded) {
             setComments(null);
-            return;
         }
         if(!expanded){
             loadComments();
@@ -48,7 +38,6 @@ function CommentsButton({ postId, expanded, setComments, totalComments, setTotal
                     backgroundColor='transparent'
                 />
             </Container>
-            <Alert error={error} setError={setError} button={true} />
         </>
     );
 }

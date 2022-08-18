@@ -42,6 +42,7 @@ function Post({
     const [deleting, setDeleting] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [message, setMessage] = useState('');
+    const [loadingComments, setLoadingComments] = useState(false);
 
     function handleClickHashtag(hashtag) {
         navigate(`/hashtag/${hashtag}`);
@@ -123,12 +124,12 @@ function Post({
         })
         .then(res => {
             setComments([...res.data.comments]);
-            setTotalComments(res.data.commentsTotal)
+            setTotalComments(res.data.commentsTotal);
         })
         .catch(err => {
             // setLoading('');
-            // setError(true)
-            console.log(err)
+            setMessage(err.response.data);
+            console.log(err);
         });
     }
 
@@ -155,13 +156,12 @@ function Post({
                         <RepostButton
                             reposts={reposts}
                             postId={postId} />                        
-                        <CommentsButton                         // Comments contains the actual comments while
-                            postId={postId}                     // expanded is to know if comments are showing
-                            expanded={!!comments}               // or not, if they're showing, then even empty
-                            setComments={setComments}           // arrays are truthy and we render them. If not,
-                            totalComments={totalComments}       // set comments to null so we know not to render.
-                            setTotalComments={setTotalComments}
-                            loadComments={loadComments} />
+                        <CommentsButton                         
+                            expanded={!!comments}               
+                            setComments={setComments}           
+                            totalComments={totalComments}       
+                            loadComments={loadComments}
+                            loading={loadingComments} />
                     </AuthorContainer>
                     <ContentContainer>
                         <AuthorName>
@@ -207,7 +207,6 @@ function Post({
                     setComments={setComments}
                     setTotalComments={setTotalComments}
                     originalAuthor={authorId}
-
                 />
             </BaseDiv>
             <Alert error={message} setError={setMessage} button={true} />
