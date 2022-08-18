@@ -19,8 +19,12 @@ function CommentsButton({ postId, expanded, setComments, totalComments, setTotal
             setComments(null);
             return;
         }
+        if(!expanded){
+            // axios ...
+            setComments({})
+        }
 
-        // axios ...
+        
     }
 
     return (

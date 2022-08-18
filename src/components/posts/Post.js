@@ -13,6 +13,7 @@ import { RiEdit2Fill } from 'react-icons/ri';
 import { FaTrash } from 'react-icons/fa';
 import { IoSend } from 'react-icons/io5';
 import { BiRepost } from "react-icons/bi";
+import CommentSection from './CommentSection';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -181,6 +182,7 @@ function Post({
                         <LinkPreview metadata={metadata} />
                     </ContentContainer>
                 </ContainerWrapper>
+                <CommentSection expanded={!!comments} />
             </BaseDiv>
             <Alert error={message} setError={setMessage} button={true} />
             { deleting ? (

@@ -15,10 +15,12 @@ const GlobalStyle = createGlobalStyle`
         --divcolor2: #4d4d4d;
         --divcolor3: #efefef;
         --divcolor4: #ffffff;
+        --divcolor5: #252525;
         --textcolor1: #ffffff;
         --textcolor2: #b7b7b7;
         --textcolor3: #9b9b9b;
         --textcolor4: #3c3c3c;
+        --textcolor5: #575757;
         --bgcolor: #333333;
         --inputbg: #ffffff;
         --buttonbg: #1877F2;
