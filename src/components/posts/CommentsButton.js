@@ -25,28 +25,31 @@ function CommentsButton({ postId, expanded, setComments, totalComments, setTotal
     }
 
     return (
-        <Container>
-            <Button
-                data-tip={ReactDOMServer.renderToString(
-                    <TooltipDiv>
-                        {expanded ? 'Hide comments' : 'Show comments'}
-                    </TooltipDiv>
-                )}
-                data-html={true}
-                onClick={handleClick}
-                disabled={loading}
-            >
-                <AiOutlineComment
-                    color='var(--textcolor1)'
-                    size={35}
+        <>
+            <Container>
+                <Button
+                    data-tip={ReactDOMServer.renderToString(
+                        <TooltipDiv>
+                            {expanded ? 'Hide comments' : 'Show comments'}
+                        </TooltipDiv>
+                    )}
+                    data-html={true}
+                    onClick={handleClick}
+                    disabled={loading}
+                >
+                    <AiOutlineComment
+                        color='var(--textcolor1)'
+                        size={35}
+                    />
+                </Button>
+                    <p>{totalComments} comments</p>
+                <ReactTooltip
+                    place='bottom'
+                    backgroundColor='transparent'
                 />
-            </Button>
-                <p>{totalComments} comments</p>
-            <ReactTooltip
-                place='bottom'
-                backgroundColor='transparent'
-            />
-        </Container>
+            </Container>
+            <Alert error={error} setError={setError} button={true} />
+        </>
     );
 }
 
