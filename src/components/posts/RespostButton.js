@@ -1,7 +1,7 @@
 import { BiRepost } from "react-icons/bi";
 import { IconContext } from "react-icons";
 import styled from 'styled-components';
-import { useState, useEffect,useContext } from "react";
+import { useState, useContext } from "react";
 import ReactTooltip from 'react-tooltip';
 import ReactDOMServer from 'react-dom/server';
 import UserContext from '../../shared/userContext';
@@ -13,6 +13,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 export default function RepostButton(props){
     const [message,setMessage]=useState('');
     const [reposting,setReposting]=useState(false);
+    const [repostsCount,setRepostsCount]=useState(props.reposts);
     const { token } = useContext(UserContext);
     function handleRepost(){
 
@@ -25,6 +26,7 @@ export default function RepostButton(props){
             .then(() => {
                 setReposting(false);
                 setMessage('Reposted successfully!');
+                setRepostsCount(repostsCount + 1);
 
             })
             .catch(err => {
@@ -53,7 +55,7 @@ export default function RepostButton(props){
                 >
                     <BiRepost />
                 </Button>
-                <p>{props.reposts} reposts</p>
+                <p>{repostsCount} reposts</p>
                 <ReactTooltip
                     place='bottom'
                     backgroundColor='transparent'
