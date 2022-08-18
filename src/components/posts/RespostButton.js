@@ -36,7 +36,7 @@ export default function RepostButton(props){
         <IconContext.Provider
             value={{
                 color:"var(--divcolor4)",
-                size: 35
+                size: 24
             }}>
 
             <Container>
@@ -73,7 +73,7 @@ const Container=styled.div`
     flex-direction: column;
     align-items: center;
     p {
-        margin-top: 12px;
+        margin-top: 8px;
         font-family:var(--scriptfont);
         color:var(--textcolor1);
         font-size: 11px;
