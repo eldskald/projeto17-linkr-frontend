@@ -164,7 +164,7 @@ const UserAvatar = styled.div`
 const AvatarImg = styled.img`
     width: 52px;
     height: 52px;
-    object-fit: border;
+    object-fit: cover;
     border-radius: 50%;
 `;
 
@@ -315,7 +315,7 @@ const SearchResult = styled.button`
         > img {
             width: 36px;
             height: 36px;
-            object-fit: border;
+            object-fit: cover;
             border-radius: 50%;
         } 
 
