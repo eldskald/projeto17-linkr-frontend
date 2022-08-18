@@ -9,7 +9,7 @@ import Alert from '../Alert';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-function CommentsButton({ postId, expanded, setComments, totalComments, setTotalComments }) {    
+function CommentsButton({ postId, expanded, setComments, totalComments, setTotalComments,loadComments }) {    
     const { token, user } = useContext(UserContext);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -20,21 +20,7 @@ function CommentsButton({ postId, expanded, setComments, totalComments, setTotal
             return;
         }
         if(!expanded){
-            axios.get(`${API_URL}/comments/${postId}?limit=10&offset=0`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            .then(res => {
-                setComments([...res.data.comments]);
-                console.log(res.data)
-            })
-            .catch(err => {
-                // setLoading('');
-                // setError(true)
-                console.log(err)
-            });
+            loadComments();
         }        
     }
 

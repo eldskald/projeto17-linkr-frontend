@@ -114,6 +114,23 @@ function Post({
                 setDeleting(false);
             })
     }
+    function loadComments(){
+        axios.get(`${API_URL}/comments/${postId}?limit=10&offset=0`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        .then(res => {
+            setComments([...res.data.comments]);
+            setTotalComments(res.data.commentsTotal)
+        })
+        .catch(err => {
+            // setLoading('');
+            // setError(true)
+            console.log(err)
+        });
+    }
 
     return (
         <> 
@@ -143,7 +160,8 @@ function Post({
                             expanded={!!comments}               // or not, if they're showing, then even empty
                             setComments={setComments}           // arrays are truthy and we render them. If not,
                             totalComments={totalComments}       // set comments to null so we know not to render.
-                            setTotalComments={setTotalComments} />
+                            setTotalComments={setTotalComments}
+                            loadComments={loadComments} />
                     </AuthorContainer>
                     <ContentContainer>
                         <AuthorName>
@@ -189,6 +207,7 @@ function Post({
                     setComments={setComments}
                     setTotalComments={setTotalComments}
                     originalAuthor={authorId}
+
                 />
             </BaseDiv>
             <Alert error={message} setError={setMessage} button={true} />
