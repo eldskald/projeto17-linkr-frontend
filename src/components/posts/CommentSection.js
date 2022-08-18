@@ -6,18 +6,22 @@ import { IoPaperPlaneOutline } from 'react-icons/io5';
 import UserContext from '../../shared/userContext';
 
 export default function CommentSection({
-    expanded,postId,comments,setComments
+    expanded,postId,comments,setComments,originalAuthor
 }){
     const { user, token } = useContext(UserContext);
     return(
         <Wrapper expanded={expanded}>
-            {/* {comments.map((comment,index)=>
+            {comments ? (comments.map((comment,index)=>
                 <Comment 
                     key={index}
-                    postId={post}
-                    comment={comment.comment}
-                    commenterId={comment}
-                />)} */}
+                    postId={postId}
+                    comment={comment.text}
+                    authorId={comment.authorId}
+                    authorName={comment.authorName}
+                    authorPicture={comment.authorPicture}
+                    originalAuthor={originalAuthor}
+                    following={comment.following}
+                />)):""}
             <MakeCommentWrapper>
                 <IconWrapper>
                     <AuthorIcon

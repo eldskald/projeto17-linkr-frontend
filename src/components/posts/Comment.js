@@ -3,24 +3,32 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-export default function Comment(){
+export default function Comment({
+    postId,
+    comment,
+    authorId,
+    authorName,
+    authorPicture,
+    originalAuthor,
+    following
+}){
 
     const navigate = useNavigate();
     return(
         <CommentWrapper>
             <IconWrapper>
                 <AuthorIcon
-                    onClick={() => navigate(`/user/${"7"}`)}
-                    src={"https://tausugdelicacieshome.files.wordpress.com/2019/01/baolo.jpg"}
-                    alt={"authorName"}
+                    onClick={() => navigate(`/user/${authorId}`)}
+                    src={authorPicture}
+                    alt={authorName}
                 />
             </IconWrapper>
             <ContentWrapper>
                 <AuthorName>
-                    <p onClick={() => navigate(`/user/${"7"}`)}>{"authorName"}</p>
+                    <p onClick={() => navigate(`/user/${authorId}`)}>{authorName} <span>{authorId===originalAuthor? " • post's author" :""}{following? " • following" :""}</span></p>
                 </AuthorName>
                 <Description>
-                    {"COMENTÁRIO"}
+                    {comment}
                 </Description>
             </ContentWrapper>
         </CommentWrapper>

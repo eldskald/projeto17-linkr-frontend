@@ -20,11 +20,22 @@ function CommentsButton({ postId, expanded, setComments, totalComments, setTotal
             return;
         }
         if(!expanded){
-            // axios ...
-            setComments({})
-        }
-
-        
+            axios.get(`${API_URL}/comments/${postId}?limit=10&offset=0`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            .then(res => {
+                setComments([...res.data.comments]);
+                console.log(res.data)
+            })
+            .catch(err => {
+                // setLoading('');
+                // setError(true)
+                console.log(err)
+            });
+        }        
     }
 
     return (
