@@ -143,7 +143,7 @@ function Post({
                     margin: 0px 0px 32px 0px;
                     flex-direction: column;
                 `}>
-                {reposterName ? <ReposterTitle><BiRepost/><h1> Reposted By <b>{` ${reposterName}`}</b></h1></ReposterTitle>:''}
+                {reposterName ? <ReposterTitle><BiRepost/><h1> Reposted By <b>{reposterId===userId ? "You": reposterName}</b></h1></ReposterTitle>:''}
                 <ContainerWrapper>
                     <AuthorContainer>
                         <AuthorIcon
