@@ -37,6 +37,7 @@ function Feed({ posts, loading, error, reloadFeed }) {
                     reposterId={post.reposterId}
                     reposts={post.repostCount ? post.repostCount : 0}                
                     reloadFeed={reloadFeed}
+                    commentCount={post.commentCount}
                 />
             ))}
         </Container>

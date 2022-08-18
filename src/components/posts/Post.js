@@ -31,12 +31,12 @@ function Post({
     reposts,
     reposterName,
     reposterId,
-    comments: initialCommentCount
+    commentCount
 }) {
     const navigate = useNavigate();
     const { token } = useContext(UserContext);
     const [comments, setComments] = useState(false);
-    const [totalComments, setTotalComments] = useState(initialCommentCount);
+    const [totalComments, setTotalComments] = useState(commentCount);
     const [editing, setEditing] = useState(false);
     const [newDesc, setNewDesc] = useState(description);
     const [deleting, setDeleting] = useState(false);
@@ -231,7 +231,7 @@ b{
 
 const AuthorContainer = styled.div`
     height: 100%;
-
+    width: fit-content;
     padding: 16px 0px;
     display: flex;
     flex-direction: column;
