@@ -182,7 +182,12 @@ function Post({
                         <LinkPreview metadata={metadata} />
                     </ContentContainer>
                 </ContainerWrapper>
-                <CommentSection expanded={!!comments} />
+                <CommentSection 
+                    expanded={!!comments} 
+                    comments={comments}
+                    postId={postId}
+                    setComments={setComments}
+                />
             </BaseDiv>
             <Alert error={message} setError={setMessage} button={true} />
             { deleting ? (

@@ -3,19 +3,25 @@ import axios from 'axios';
 import styled from 'styled-components';
 import Comment from './Comment';
 import { IoPaperPlaneOutline } from 'react-icons/io5';
+import UserContext from '../../shared/userContext';
 
 export default function CommentSection({
-    expanded
+    expanded,postId,comments,setComments
 }){
+    const { user, token } = useContext(UserContext);
     return(
         <Wrapper expanded={expanded}>
-            <Comment />
-            <Comment />
+            {/* {comments.map((comment,index)=>
+                <Comment 
+                    key={index}
+                    postId={post}
+                    comment={comment.comment}
+                    commenterId={comment}
+                />)} */}
             <MakeCommentWrapper>
                 <IconWrapper>
                     <AuthorIcon
-                        src={"https://tausugdelicacieshome.files.wordpress.com/2019/01/baolo.jpg"}
-                        alt={"authorName"}
+                        src={user.profilePictureUrl} alt={user.name}
                     />
                 </IconWrapper>
                 <InputWrapper>
