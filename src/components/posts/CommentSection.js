@@ -1,14 +1,16 @@
-import { useState, useContext } from 'react';
-import axios from 'axios';
+import { useContext,useState } from 'react';
 import styled from 'styled-components';
 import Comment from './Comment';
 import { IoPaperPlaneOutline } from 'react-icons/io5';
+import ClipLoader from 'react-spinners/ClipLoader';
 import UserContext from '../../shared/userContext';
+import axios from 'axios';
+
 
 const API_URL = process.env.REACT_APP_API_URL;
 
 export default function CommentSection({
-    expanded,postId,comments,setComments,originalAuthor,loadComments
+    expanded,postId,comments,setComments,originalAuthor,loadComments,loading
 }){
     const { user, token } = useContext(UserContext);
     const [userComment,setUserComment]=useState("");
@@ -36,8 +38,15 @@ export default function CommentSection({
                 setSubmitting(false);
             });
     }
+
     return(
         <Wrapper expanded={expanded}>
+            <SpinnerWrapper loading={loading}>
+                <ClipLoader
+                    color={'var(--contrastcolor1)'}
+                    size={50}
+                />
+            </SpinnerWrapper>
             {comments ? (comments.map((comment,index)=>
                 <Comment 
                     key={index}
@@ -83,6 +92,12 @@ justify-content: left;
 width: 100%;
 padding-top: 5px;
 `;
+const SpinnerWrapper = styled.div`
+margin: 16px 0px;
+display: flex;
+justify-content: center;
+display: ${props => props.loading ? 'block' : 'none'};
+`;
 const IconWrapper=styled.div`
 width:82px;
 display: flex;
@@ -108,6 +123,7 @@ font-size:20px;
 color:var(--textcolor1);
 width:20px;
 margin-right: 15px;
+cursor: pointer;
 `;
 const InputWrapper=styled.div`
 width: calc(100% - 82px);

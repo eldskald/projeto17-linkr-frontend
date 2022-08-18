@@ -79,6 +79,9 @@ const AuthorName = styled.div`
         :hover {
             color: var(--contrastcolor1);
         }
+        span{
+            color: var(--textcolor5);
+        }
     }
 `;
 const Description = styled.div`

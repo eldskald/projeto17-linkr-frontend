@@ -1,23 +1,13 @@
-import { useState, useContext } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
 import ReactTooltip from 'react-tooltip';
 import ReactDOMServer from 'react-dom/server';
 import { AiOutlineComment } from 'react-icons/ai';
-import UserContext from '../../shared/userContext';
-import Alert from '../Alert';
 
-const API_URL = process.env.REACT_APP_API_URL;
-
-function CommentsButton({ postId, expanded, setComments, totalComments, setTotalComments,loadComments }) {    
-    const { token, user } = useContext(UserContext);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+function CommentsButton({ expanded, setComments, totalComments, loadComments, loading }) {    
 
     function handleClick() {
         if (expanded) {
             setComments(null);
-            return;
         }
         if(!expanded){
             loadComments();
@@ -25,28 +15,30 @@ function CommentsButton({ postId, expanded, setComments, totalComments, setTotal
     }
 
     return (
-        <Container>
-            <Button
-                data-tip={ReactDOMServer.renderToString(
-                    <TooltipDiv>
-                        {expanded ? 'Hide comments' : 'Show comments'}
-                    </TooltipDiv>
-                )}
-                data-html={true}
-                onClick={handleClick}
-                disabled={loading}
-            >
-                <AiOutlineComment
-                    color='var(--textcolor1)'
-                    size={35}
+        <>
+            <Container>
+                <Button
+                    data-tip={ReactDOMServer.renderToString(
+                        <TooltipDiv>
+                            {expanded ? 'Hide comments' : 'Show comments'}
+                        </TooltipDiv>
+                    )}
+                    data-html={true}
+                    onClick={handleClick}
+                    disabled={loading}
+                >
+                    <AiOutlineComment
+                        color='var(--textcolor1)'
+                        size={35}
+                    />
+                </Button>
+                    <p>{totalComments} comments</p>
+                <ReactTooltip
+                    place='bottom'
+                    backgroundColor='transparent'
                 />
-            </Button>
-                <p>{totalComments} comments</p>
-            <ReactTooltip
-                place='bottom'
-                backgroundColor='transparent'
-            />
-        </Container>
+            </Container>
+        </>
     );
 }
 
