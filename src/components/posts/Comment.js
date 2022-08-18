@@ -81,6 +81,7 @@ const AuthorName = styled.div`
         }
         span{
             color: var(--textcolor5);
+            margin-left: 4px;
         }
     }
 `;

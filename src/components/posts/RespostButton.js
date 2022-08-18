@@ -2,6 +2,7 @@ import { BiRepost } from "react-icons/bi";
 import { IconContext } from "react-icons";
 import styled from 'styled-components';
 import { useState, useEffect,useContext } from "react";
+import ReactTooltip from 'react-tooltip';
 import ReactDOMServer from 'react-dom/server';
 import UserContext from '../../shared/userContext';
 import axios from "axios";
@@ -10,7 +11,6 @@ import Alert from "../Alert";
 const API_URL = process.env.REACT_APP_API_URL;
 
 export default function RepostButton(props){
-    const [reposts,setReposts]=useState(Number(props.reposts));
     const [message,setMessage]=useState('');
     const [reposting,setReposting]=useState(false);
     const { token } = useContext(UserContext);
@@ -24,6 +24,7 @@ export default function RepostButton(props){
             })
             .then(() => {
                 setReposting(false);
+                setMessage('Reposted successfully!');
 
             })
             .catch(err => {
@@ -43,10 +44,20 @@ export default function RepostButton(props){
                 <Button 
                     onClick={() => setReposting(!reposting)}
                     disabled={reposting ? true : false}
+                    data-tip={ReactDOMServer.renderToString(
+                        <TooltipDiv>
+                            Repost this link
+                        </TooltipDiv>
+                    )}
+                    data-html={true}
                 >
                     <BiRepost />
                 </Button>
                 <p>{props.reposts} reposts</p>
+                <ReactTooltip
+                    place='bottom'
+                    backgroundColor='transparent'
+                />
             </Container>
             <Alert error={message} setError={setMessage} button={true} />
             { reposting ? (
@@ -93,6 +104,15 @@ const Button=styled.button`
     :disabled {
         opacity: 0.5;
     }
+`;
+
+const TooltipDiv=styled.div`
+    padding: 8px;
+    border-radius: 8px;
+    background-color: var(--divcolor4);
+    font-family: var(--scriptfont);
+    font-size: 14px;
+    color: var(--textcolor4);
 `;
 
 const DeletePopupBackground = styled.div`

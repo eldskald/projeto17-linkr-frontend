@@ -47,17 +47,25 @@ export default function CommentSection({
                     size={50}
                 />
             </SpinnerWrapper>
-            {comments ? (comments.map((comment,index)=>
-                <Comment 
-                    key={index}
-                    postId={postId}
-                    comment={comment.text}
-                    authorId={comment.authorId}
-                    authorName={comment.authorName}
-                    authorPicture={comment.authorPicture}
-                    originalAuthor={originalAuthor}
-                    following={comment.following}
-                />)):""}
+            {comments ? (
+                <>
+                    <NoCommentsMessage enabled={comments.length === 0}>
+                        No comments yet.
+                    </NoCommentsMessage>
+                    {comments.map((comment,index) =>
+                        <Comment 
+                            key={index}
+                            postId={postId}
+                            comment={comment.text}
+                            authorId={comment.authorId}
+                            authorName={comment.authorName}
+                            authorPicture={comment.authorPicture}
+                            originalAuthor={originalAuthor}
+                            following={comment.following}
+                        />
+                    )}
+                </>
+            ):""}
             <MakeCommentWrapper>
                 <IconWrapper>
                     <AuthorIcon
@@ -85,6 +93,16 @@ margin-top: 20px;
 width:100%;
 display: ${props => props.expanded ? "flex":"none"};
 flex-direction: column;
+`;
+const NoCommentsMessage=styled.div`
+margin: 24px 0px;
+width: 100%;
+display: ${props => props.enabled ? "flex":"none"};
+justify-content: center;
+align-items: center;
+font-family: var(--scriptfont);
+font-size: 18px;
+color: var(--textcolor3);
 `;
 const MakeCommentWrapper=styled.div`
 display:flex;

@@ -32,7 +32,7 @@ function CommentsButton({ expanded, setComments, totalComments, loadComments, lo
                         size={24}
                     />
                 </Button>
-                    <p>{totalComments} comments</p>
+                <p>{totalComments} comments</p>
                 <ReactTooltip
                     place='bottom'
                     backgroundColor='transparent'

@@ -42,7 +42,7 @@ function Post({
     const [deleting, setDeleting] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [message, setMessage] = useState('');
-    const [loadingComments, setLoadingComments] = useState(false);
+    const [loadingComments, setLoadingComments] = useState('');
 
     function handleClickHashtag(hashtag) {
         navigate(`/hashtag/${hashtag}`);
@@ -116,7 +116,7 @@ function Post({
             })
     }
     function loadComments(){
-        setLoadingComments(true);
+        setLoadingComments('loading');
         axios.get(`${API_URL}/comments/${postId}?limit=10&offset=0`,
         {
             headers: {
@@ -124,12 +124,12 @@ function Post({
             }
         })
         .then(res => {
-            setLoadingComments(false);
+            setLoadingComments('');
             setComments([...res.data.comments]);
             setTotalComments(res.data.commentsTotal);
         })
         .catch(err => {
-            setLoadingComments(false);
+            setLoadingComments('');
             setMessage(err.response.data);
             console.log(err);
         });
