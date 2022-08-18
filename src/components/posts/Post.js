@@ -256,7 +256,7 @@ b{
 const AuthorContainer = styled.div`
     height: 100%;
     width: fit-content;
-    padding: 16px 0px;
+    padding-bottom: 8px;
     display: flex;
     flex-direction: column;
     align-items: center;
