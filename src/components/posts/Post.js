@@ -207,7 +207,7 @@ function Post({
                     setComments={setComments}
                     setTotalComments={setTotalComments}
                     originalAuthor={authorId}
-
+                    loadComments={loadComments}
                 />
             </BaseDiv>
             <Alert error={message} setError={setMessage} button={true} />

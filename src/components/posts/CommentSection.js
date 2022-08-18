@@ -5,10 +5,37 @@ import Comment from './Comment';
 import { IoPaperPlaneOutline } from 'react-icons/io5';
 import UserContext from '../../shared/userContext';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 export default function CommentSection({
-    expanded,postId,comments,setComments,originalAuthor
+    expanded,postId,comments,setComments,originalAuthor,loadComments
 }){
     const { user, token } = useContext(UserContext);
+    const [userComment,setUserComment]=useState("");
+    const [submitting,setSubmitting]=useState(false);
+
+    function handleSubmit(event) {
+        event.preventDefault();
+
+        setSubmitting(true);
+        axios.post(`${API_URL}/comment/${postId}`,
+            {
+                comment:userComment
+            },
+            { 
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            .then(() => {
+                setUserComment('');
+                setSubmitting(false);
+                loadComments();
+            })
+            .catch(err => {
+                setSubmitting(false);
+            });
+    }
     return(
         <Wrapper expanded={expanded}>
             {comments ? (comments.map((comment,index)=>
@@ -31,11 +58,11 @@ export default function CommentSection({
                 <InputWrapper>
                     <CommentInput
                                 placeholder={'write a comment'}
-                                //value={"description"}
-                                // onChange={e => setDescription(e.target.value)}
-                                // disabled={submitting}
+                                value={userComment}
+                                onChange={e => setUserComment(e.target.value)}
+                                disabled={submitting}                                
                             />
-                    <SendButton>
+                    <SendButton onClick={handleSubmit}>
                         <IoPaperPlaneOutline />
                     </SendButton>        
                 </InputWrapper>
