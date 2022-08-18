@@ -5,8 +5,9 @@ import BaseDiv from '../../styles/baseDiv';
 import Alert from '../Alert';
 import LikeButton from './LikeButton';
 import RepostButton from './RespostButton';
+import CommentsButton from './CommentsButton';
 import LinkPreview from './LinkPreview';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import UserContext from '../../shared/userContext';
 import { RiEdit2Fill } from 'react-icons/ri';
 import { FaTrash } from 'react-icons/fa';
@@ -16,11 +17,25 @@ import { BiRepost } from "react-icons/bi";
 const API_URL = process.env.REACT_APP_API_URL;
 
 function Post({
-    postId, userId, authorId, authorName, authorPicture, description, liked, likes, metadata, reloadFeed, reposts,reposterName,reposterId
+    postId,
+    userId,
+    authorId, 
+    authorName, 
+    authorPicture, 
+    description, 
+    liked, 
+    likes,
+    metadata, 
+    reloadFeed, 
+    reposts,
+    reposterName,
+    reposterId,
+    comments: initialCommentCount
 }) {
     const navigate = useNavigate();
     const { token } = useContext(UserContext);
-    const [descState, setDescState] = useState(description);
+    const [comments, setComments] = useState(false);
+    const [totalComments, setTotalComments] = useState(initialCommentCount);
     const [editing, setEditing] = useState(false);
     const [newDesc, setNewDesc] = useState(description);
     const [deleting, setDeleting] = useState(false);
@@ -122,6 +137,12 @@ function Post({
                         <RepostButton
                             reposts={reposts}
                             postId={postId} />                        
+                        <CommentsButton                         // Comments contains the actual comments while
+                            postId={postId}                     // expanded is to know if comments are showing
+                            expanded={!!comments}               // or not, if they're showing, then even empty
+                            setComments={setComments}           // arrays are truthy and we render them. If not,
+                            totalComments={totalComments}       // set comments to null so we know not to render.
+                            setTotalComments={setTotalComments} />
                     </AuthorContainer>
                     <ContentContainer>
                         <AuthorName>
@@ -154,7 +175,7 @@ function Post({
                             />
                         ) : (
                             <Description>
-                                {parseDescription(descState)}
+                                {parseDescription(description)}
                             </Description>
                         )}
                         <LinkPreview metadata={metadata} />
@@ -211,10 +232,10 @@ const AuthorContainer = styled.div`
 `;
 
 const ContentContainer = styled.div`
-    height: 100%;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 `;
 
 const AuthorIcon = styled.img`
