@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
+import useInterval from 'use-interval';
 import UserContext from '../../shared/userContext';
 import styled from 'styled-components';
 
@@ -9,30 +10,24 @@ export default function NewPostsPopUp({ reloadPosts, posts}){
     const { token } = useContext(UserContext);
     const [nPosts, setnPosts] = useState([]);
 
-    useEffect(() => {
-        const interval = setInterval(checkForMorePosts, 5000);
-        return () => {
-            clearInterval(interval);
-        };
-    }, []);
-
-    function checkForMorePosts() {
+    useInterval(() => {
         if (posts.length === 0) {
             return;
         }
 
         axios.get(`${API_URL}/posts?limit=1&offset=0`,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        .then(res => {
-            const newestPost = res.data[0];
-            console.log(newestPost.createdTime);
-            console.log(posts[0].createdTime);
-        })
-    }
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            .then(res => {
+                const newestPost = res.data[0];
+                console.log(typeof newestPost.createdTime);
+                console.log(newestPost.createdTime);
+                console.log(posts[0].createdTime);
+            });
+    }, 5000);
 
     if(nPosts > 0){
         return(
