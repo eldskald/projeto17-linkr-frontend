@@ -87,6 +87,7 @@ function Home() {
                     <SubContainer>
                         <Container>
                             <NewPost reloadPosts={loadPosts} />
+                            <NewPostsPopUp posts={posts} reloadPosts={loadPosts} />
                             {loading ? (
                                 <SpinnerWrapper>
                                     <ClipLoader

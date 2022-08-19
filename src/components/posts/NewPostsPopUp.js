@@ -8,7 +8,6 @@ const API_URL = process.env.REACT_APP_API_URL;
 export default function NewPostsPopUp({ reloadPosts, posts}){
     const { token } = useContext(UserContext);
     const [nPosts, setnPosts] = useState([]);
-    const [teste2, setTeste2] = useState(0);
 
     useEffect(() => {
         const interval = setInterval(checkForMorePosts, 5000);
@@ -18,15 +17,20 @@ export default function NewPostsPopUp({ reloadPosts, posts}){
     }, []);
 
     function checkForMorePosts() {
-        axios.get(`${API_URL}/posts/time/${teste}`,
+        if (posts.length === 0) {
+            return;
+        }
+
+        axios.get(`${API_URL}/posts?limit=1&offset=0`,
         {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         })
         .then(res => {
-            setnPosts(res.data.length);
-            console.log(nPosts);
+            const newestPost = res.data[0];
+            console.log(newestPost.createdTime);
+            console.log(posts[0].createdTime);
         })
     }
 
