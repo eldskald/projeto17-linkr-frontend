@@ -61,7 +61,7 @@ export default function HashtagPage() {
     return (
         <>
             <Header />
-            <ContainerAll>
+            <ContainerAll id='scrollable'>
                 <SubContainerAll>
                     <TitleWrapper>#{hashtag}</TitleWrapper>
                     <SubContainer>
