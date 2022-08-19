@@ -81,6 +81,9 @@ function Header() {
                 </UserAvatar>
             </Container>
             <DropdownMenu active={dropdown}>
+                <div onClick={() => navigate(`/user/${user.id}`)}>
+                    My posts
+                </div>
                 <div onClick={handleLogout}>
                     Logout
                 </div>
@@ -164,16 +167,23 @@ const UserAvatar = styled.div`
 const AvatarImg = styled.img`
     width: 52px;
     height: 52px;
-    object-fit: border;
+    object-fit: cover;
     border-radius: 50%;
 `;
 
 const IconWrapper = styled.div`
     transition: transform 0.2s;
+
+    :hover {
+        transform: scale(1.3);
+    }
     
     ${(props) => (
         props.active && css`
             transform: rotate(-180deg);
+            :hover {
+                transform: rotate(-180deg) scale(1.3);
+            }
         `
     )};
 `;
@@ -184,15 +194,18 @@ const DropdownMenu = styled.div`
     right: 0px;
     z-index: 2;
     width: 160px;
-    height: 48px;
+    height: 96px;
 
+    padding-bottom: 16px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-around;
     align-items: center;
 
     background-color: var(--divcolor1);
     border-radius: 0px 0px 0px 20px;
     transition: transform 0.2s;
+    transform: translateY(-42px);
 
     ${(props) => (
         props.active && css`
@@ -315,7 +328,7 @@ const SearchResult = styled.button`
         > img {
             width: 36px;
             height: 36px;
-            object-fit: border;
+            object-fit: cover;
             border-radius: 50%;
         } 
 
