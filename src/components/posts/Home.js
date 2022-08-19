@@ -2,11 +2,13 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
+import ClipLoader from 'react-spinners/ClipLoader';
 import UserContext from '../../shared/userContext';
 import Header from '../Header';
 import Feed from './Feed';
 import NewPost from './NewPost';
 import TrendingHashtags from '../hashtags/TrendingHashtags';
+import NewPostsPopUp from './NewPostsPopUp';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -18,6 +20,7 @@ function Home() {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState('true');
     const [isFollowing, setIsFollowing] = useState(false);
+    const [scrollMore, setScrollMore] = useState(true);
     const [error, setError] = useState(false);
     const [trendingTagsReloader, setTrendingTagsReloader] = useState(true);
 
@@ -43,12 +46,18 @@ function Home() {
             });
     }, []);
 
-    function loadPosts() {
-        setLoading('true');
+    function loadPosts(moreContent) {
+        let queryStrings;
+        if (moreContent) {
+            queryStrings = `?limit=10&offset=${posts.length}`;
+        } else {
+            setLoading('true');
+            setPosts([]);
+            queryStrings = `?limit=10&offset=0`;
+        }
         setError(false);
         setTrendingTagsReloader(!trendingTagsReloader)
-        setPosts([]);
-        axios.get(`${API_URL}/posts?limit=10&offset=0`,
+        axios.get(`${API_URL}/posts${queryStrings}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -56,30 +65,35 @@ function Home() {
             })
             .then(res => {
                 setLoading('');
-                setPosts([...res.data]);
+                if (moreContent) {
+                    if (res.data.length === 0) setScrollMore(false);
+                    else setPosts([...posts, ...res.data]);
+                } else {
+                    setPosts([...res.data]);
+                }
             })
             .catch(() => {
                 setLoading('');
-                setError(true)
+                setError(true);
             });
     }
 
     return (
         <>
             <Header />
-            <ContainerAll>
+            <ContainerAll id='scrollable'>
                 <SubContainerAll>
                     <TitleWrapper>timeline</TitleWrapper>
                     <SubContainer>
                         <Container>
                             <NewPost reloadPosts={loadPosts} />
                             {loading ? (
-                                <Feed
-                                    posts={[]}
-                                    loading={loading}
-                                    error={false}
-                                    reloadFeed={loadPosts}
-                                />
+                                <SpinnerWrapper>
+                                    <ClipLoader
+                                        color={'var(--contrastcolor1)'}
+                                        size={150}
+                                    />
+                                </SpinnerWrapper>
                             ) : (
                                 isFollowing ? (
                                     posts.length === 0 && !error ? (
@@ -94,6 +108,7 @@ function Home() {
                                             loading={loading}
                                             error={error}
                                             reloadFeed={loadPosts}
+                                            scrollMore={scrollMore}
                                         />
                                 )) : (
                                     <EmptyFeed>
@@ -123,7 +138,6 @@ const ContainerAll = styled.div`
 `;
 
 const SubContainerAll = styled.div`
-    
     padding-top: 72px;
     display: flex;
     flex-direction: column;
@@ -183,6 +197,10 @@ const EmptyFeed = styled.div`
         color: var(--textcolor2);
         text-align: center;
     }
+`;
+
+const SpinnerWrapper = styled.div`
+    margin-top: 64px;
 `;
 
 export default Home;

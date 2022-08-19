@@ -26,8 +26,7 @@ export default function RepostButton(props){
             .then(() => {
                 setReposting(false);
                 setMessage('Reposted successfully!');
-                setRepostsCount(repostsCount + 1);
-
+                setRepostsCount(parseInt(repostsCount) + 1);
             })
             .catch(err => {
                 setReposting(false);
