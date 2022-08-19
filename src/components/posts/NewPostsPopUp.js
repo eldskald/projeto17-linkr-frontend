@@ -9,18 +9,15 @@ export default function NewPostsPopUp({ reloadPosts, posts}){
     const { token } = useContext(UserContext);
     const [nPosts, setnPosts] = useState([]);
     const [teste2, setTeste2] = useState(0);
-    let teste = posts[0]
-
-    if (teste !== undefined){
-        try {
-            teste = teste.createdTime
-        }catch{
-            console.log("error")
-        }
-    }
 
     useEffect(() => {
-        console.log(teste)
+        const interval = setInterval(checkForMorePosts, 5000);
+        return () => {
+            clearInterval(interval);
+        };
+    }, []);
+
+    function checkForMorePosts() {
         axios.get(`${API_URL}/posts/time/${teste}`,
         {
             headers: {
@@ -31,13 +28,6 @@ export default function NewPostsPopUp({ reloadPosts, posts}){
             setnPosts(res.data.length);
             console.log(nPosts);
         })
-
-    }, [teste2]);
-
-    
-
-    function testando(){
-        setTeste2(teste2 + 1);
     }
 
     if(nPosts > 0){
