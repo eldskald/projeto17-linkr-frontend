@@ -10,12 +10,6 @@ function Feed({ posts, loading, error, reloadFeed }) {
 
     return (
         <Container>
-            <SpinnerWrapper loading={loading}>
-                <ClipLoader
-                    color={'var(--contrastcolor1)'}
-                    size={150}
-                />
-            </SpinnerWrapper>
             {error ? (
                 <ErrorContainer>
                     Failed to load!<br/>
@@ -24,9 +18,10 @@ function Feed({ posts, loading, error, reloadFeed }) {
             ) : (<></>) }
             <InfiniteScroll
                 dataLength={posts.length}
-                next={reloadFeed}
+                next={()=>reloadFeed(true)}
                 hasMore={true}
                 loader={<h4>Loading...</h4>}
+                scrollableTarget={'scrollable'}
                 endMessage={
                 <p style={{ textAlign: 'center' }}>
                 <b>Isso é tudo até agora!</b>
@@ -53,6 +48,12 @@ function Feed({ posts, loading, error, reloadFeed }) {
                 />
             ))}
             </InfiniteScroll>
+            <SpinnerWrapper loading={loading}>
+                <ClipLoader
+                    color={'var(--contrastcolor1)'}
+                    size={150}
+                />
+            </SpinnerWrapper>
         </Container>
     );
 }

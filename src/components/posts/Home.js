@@ -44,11 +44,19 @@ function Home() {
             });
     }, []);
 
-    function loadPosts() {
+    function loadPosts(moreContent) {
+
+        let queryStrings;
+        if (moreContent){
+            const offset = posts.length;
+            queryStrings = `?limit=10&offset=${offset}`;
+        }else{
+            queryStrings = `?limit=10&offset=0`;
+        }
         setLoading('true');
         setError(false);
         setTrendingTagsReloader(!trendingTagsReloader)
-        axios.get(`${API_URL}/posts?limit=10&offset=0`,
+        axios.get(`${API_URL}/posts${queryStrings}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -56,7 +64,11 @@ function Home() {
             })
             .then(res => {
                 setLoading('');
-                setPosts([...res.data]);
+                if(moreContent){
+                    setPosts([...posts, ...res.data]);
+                }else{
+                    setPosts([...res.data]);
+                }
             })
             .catch(() => {
                 setLoading('');
@@ -67,7 +79,7 @@ function Home() {
     return (
         <>
             <Header />
-            <ContainerAll>
+            <ContainerAll id='scrollable'>
                 <SubContainerAll>
                     <TitleWrapper>timeline</TitleWrapper>
                     <SubContainer>

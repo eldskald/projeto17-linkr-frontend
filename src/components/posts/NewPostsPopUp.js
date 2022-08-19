@@ -34,7 +34,7 @@ export default function NewPostsPopUp({ reloadPosts, posts}){
 
     }, [teste2]);
 
-    setInterval(testando, 5000)
+    
 
     function testando(){
         setTeste2(teste2 + 1);
