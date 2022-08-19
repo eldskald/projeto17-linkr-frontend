@@ -7,6 +7,7 @@ import Header from '../Header';
 import Feed from './Feed';
 import NewPost from './NewPost';
 import TrendingHashtags from '../hashtags/TrendingHashtags';
+import NewPostsPopUp from './NewPostsPopUp';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -47,7 +48,6 @@ function Home() {
         setLoading('true');
         setError(false);
         setTrendingTagsReloader(!trendingTagsReloader)
-        setPosts([]);
         axios.get(`${API_URL}/posts?limit=10&offset=0`,
             {
                 headers: {
@@ -73,6 +73,7 @@ function Home() {
                     <SubContainer>
                         <Container>
                             <NewPost reloadPosts={loadPosts} />
+                            <NewPostsPopUp reloadPosts={loadPosts} posts={posts} />
                             {loading ? (
                                 <Feed
                                     posts={[]}

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import ClipLoader from 'react-spinners/ClipLoader';
 import Post from './Post';
 import UserContext from '../../shared/userContext';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 function Feed({ posts, loading, error, reloadFeed }) {
     const { user } = useContext(UserContext);
@@ -21,7 +22,18 @@ function Feed({ posts, loading, error, reloadFeed }) {
                     Try refreshing.
                 </ErrorContainer>
             ) : (<></>) }
-            {posts.map((post, index) => (
+            <InfiniteScroll
+                dataLength={posts.length}
+                next={reloadFeed}
+                hasMore={true}
+                loader={<h4>Loading...</h4>}
+                endMessage={
+                <p style={{ textAlign: 'center' }}>
+                <b>Isso é tudo até agora!</b>
+                </p>
+                }
+                >
+                {posts.map((post, index) => (
                 <Post 
                     key={index}
                     userId={user.id}
@@ -40,6 +52,7 @@ function Feed({ posts, loading, error, reloadFeed }) {
                     commentCount={post.commentCount}
                 />
             ))}
+            </InfiniteScroll>
         </Container>
     );
 }
