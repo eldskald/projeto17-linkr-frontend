@@ -13,6 +13,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 export default function RepostButton(props){
     const [message,setMessage]=useState('');
     const [reposting,setReposting]=useState(false);
+    const [repostsCount,setReostsCount]=useState(props.reposts);
     const { token } = useContext(UserContext);
     function handleRepost(){
 
@@ -25,7 +26,7 @@ export default function RepostButton(props){
             .then(() => {
                 setReposting(false);
                 setMessage('Reposted successfully!');
-
+                setReostsCount(parseInt(repostsCount) + 1);
             })
             .catch(err => {
                 setReposting(false);
@@ -53,7 +54,7 @@ export default function RepostButton(props){
                 >
                     <BiRepost />
                 </Button>
-                <p>{props.reposts} reposts</p>
+                <p>{repostsCount} reposts</p>
                 <ReactTooltip
                     place='bottom'
                     backgroundColor='transparent'

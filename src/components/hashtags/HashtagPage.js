@@ -17,6 +17,7 @@ export default function HashtagPage() {
 
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState('true');
+    const [scrollMore, setScrollMore] = useState(true);
     const [error, setError] = useState(false);
     const [trendingTagsReloader, setTrendingTagsReloader] = useState(true);
 
@@ -25,12 +26,18 @@ export default function HashtagPage() {
         loadPosts();
     }, [hashtag]);
 
-    function loadPosts() {
-        setLoading('true');
+    function loadPosts(moreContent) {
+        let queryStrings;
+        if (moreContent) {
+            queryStrings = `?limit=10&offset=${posts.length}`;
+        } else {
+            setLoading('true');
+            setPosts([]);
+            queryStrings = `?limit=10&offset=0`;
+        }
         setError(false);
         setTrendingTagsReloader(!trendingTagsReloader)
-        setPosts([]);
-        axios.get(`${API_URL}/hashtags/${hashtag}?limit=10&offset=0`,
+        axios.get(`${API_URL}/hashtags/${hashtag}${queryStrings}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -38,7 +45,12 @@ export default function HashtagPage() {
             })
             .then(res => {
                 setLoading('');
-                setPosts([...res.data]);
+                if (moreContent) {
+                    if (res.data.length === 0) setScrollMore(false);
+                    else setPosts([...posts, ...res.data]);
+                } else {
+                    setPosts([...res.data]);
+                }
             })
             .catch(() => {
                 setLoading('');
@@ -59,6 +71,7 @@ export default function HashtagPage() {
                                 loading={loading}
                                 error={error}
                                 reloadFeed={loadPosts}
+                                scrollMore={scrollMore}
                             />
                         </Container>
                         <TrendingHashtags reload={trendingTagsReloader} />

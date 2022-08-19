@@ -19,6 +19,7 @@ function Home() {
     const [viewedUser,setViewedUser]=useState({});
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState('true');
+    const [scrollMore, setScrollMore] = useState(true);
     const [error, setError] = useState(false)
     const [userError, setUserError] = useState('');
     const [popup, setPopup] = useState('');
@@ -30,12 +31,18 @@ function Home() {
         loadPosts();
     }, [viewedUserId]);
 
-    function loadPosts() {
-        setLoading('true');
+    function loadPosts(moreContent) {
+        let queryStrings;
+        if (moreContent) {
+            queryStrings = `?limit=10&offset=${posts.length}`;
+        } else {
+            setLoading('true');
+            setPosts([]);
+            queryStrings = `?limit=10&offset=0`;
+        }
         setError(false);
         setTrendingTagsReloader(!trendingTagsReloader)
-        setPosts([]);
-        axios.get(`${API_URL}/posts/${viewedUserId}?limit=10&offset=0`,
+        axios.get(`${API_URL}/posts/${viewedUserId}${queryStrings}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -43,7 +50,12 @@ function Home() {
             })
             .then(res => {
                 setLoading('');
-                setPosts([...res.data]);
+                if (moreContent) {
+                    if (res.data.length === 0) setScrollMore(false);
+                    else setPosts([...posts, ...res.data]);
+                } else {
+                    setPosts([...res.data]);
+                }
             })
             .catch(() => {
                 setLoading('');
@@ -142,6 +154,7 @@ function Home() {
                                 loading={loading}
                                 error={error}
                                 reloadFeed={loadPosts}
+                                scrollMore={scrollMore}
                             />
                         </Container>
                         <TrendingHashtags reload={trendingTagsReloader} />

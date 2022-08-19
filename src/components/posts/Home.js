@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
+import ClipLoader from 'react-spinners/ClipLoader';
 import UserContext from '../../shared/userContext';
 import Header from '../Header';
 import Feed from './Feed';
@@ -19,6 +20,7 @@ function Home() {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState('true');
     const [isFollowing, setIsFollowing] = useState(false);
+    const [scrollMore, setScrollMore] = useState(true);
     const [error, setError] = useState(false);
     const [trendingTagsReloader, setTrendingTagsReloader] = useState(true);
 
@@ -45,15 +47,14 @@ function Home() {
     }, []);
 
     function loadPosts(moreContent) {
-
         let queryStrings;
-        if (moreContent){
-            const offset = posts.length;
-            queryStrings = `?limit=10&offset=${offset}`;
-        }else{
+        if (moreContent) {
+            queryStrings = `?limit=10&offset=${posts.length}`;
+        } else {
+            setLoading('true');
+            setPosts([]);
             queryStrings = `?limit=10&offset=0`;
         }
-        setLoading('true');
         setError(false);
         setTrendingTagsReloader(!trendingTagsReloader)
         axios.get(`${API_URL}/posts${queryStrings}`,
@@ -64,15 +65,16 @@ function Home() {
             })
             .then(res => {
                 setLoading('');
-                if(moreContent){
-                    setPosts([...posts, ...res.data]);
-                }else{
+                if (moreContent) {
+                    if (res.data.length === 0) setScrollMore(false);
+                    else setPosts([...posts, ...res.data]);
+                } else {
                     setPosts([...res.data]);
                 }
             })
             .catch(() => {
                 setLoading('');
-                setError(true)
+                setError(true);
             });
     }
 
@@ -85,14 +87,13 @@ function Home() {
                     <SubContainer>
                         <Container>
                             <NewPost reloadPosts={loadPosts} />
-                            <NewPostsPopUp reloadPosts={loadPosts} posts={posts} />
                             {loading ? (
-                                <Feed
-                                    posts={[]}
-                                    loading={loading}
-                                    error={false}
-                                    reloadFeed={loadPosts}
-                                />
+                                <SpinnerWrapper>
+                                    <ClipLoader
+                                        color={'var(--contrastcolor1)'}
+                                        size={150}
+                                    />
+                                </SpinnerWrapper>
                             ) : (
                                 isFollowing ? (
                                     posts.length === 0 && !error ? (
@@ -107,6 +108,7 @@ function Home() {
                                             loading={loading}
                                             error={error}
                                             reloadFeed={loadPosts}
+                                            scrollMore={scrollMore}
                                         />
                                 )) : (
                                     <EmptyFeed>
@@ -136,7 +138,6 @@ const ContainerAll = styled.div`
 `;
 
 const SubContainerAll = styled.div`
-    
     padding-top: 72px;
     display: flex;
     flex-direction: column;
@@ -196,6 +197,10 @@ const EmptyFeed = styled.div`
         color: var(--textcolor2);
         text-align: center;
     }
+`;
+
+const SpinnerWrapper = styled.div`
+    margin-top: 64px;
 `;
 
 export default Home;
