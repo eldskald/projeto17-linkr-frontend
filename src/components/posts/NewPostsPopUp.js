@@ -8,7 +8,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 export default function NewPostsPopUp({ reloadPosts, posts}){
     const { token } = useContext(UserContext);
-    const [nPosts, setnPosts] = useState([]);
+    const [newPosts, setNewPosts] = useState(false);
 
     useInterval(() => {
         if (posts.length === 0) {
@@ -22,19 +22,20 @@ export default function NewPostsPopUp({ reloadPosts, posts}){
                 }
             })
             .then(res => {
-                const newestPost = res.data[0];
-                console.log(typeof newestPost.createdTime);
-                console.log(newestPost.createdTime);
-                console.log(posts[0].createdTime);
+                const newestTime = res.data[0].createdTime;
+                if (newestTime > posts[0].createdTime) {
+                    setNewPosts(true);
+                }
             });
     }, 5000);
 
-    if(nPosts > 0){
-        return(
-           <NewPostsDiv onClick={reloadPosts}> {nPosts} new posts, load more! </NewPostsDiv>
-        )}else{
-            return;
-        }
+    return (
+        newPosts ? (
+            <NewPostsDiv onClick={reloadPosts}>
+                New posts, click to load more!
+            </NewPostsDiv>
+        ) : (<></>)
+    );
 }
 
 const NewPostsDiv = styled.div`
